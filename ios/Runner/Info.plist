@@ -4,6 +4,8 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+    <string>This app needs access to location when open.</string>
 	<key>CFBundleDisplayName</key>
 	<string>Chill Talk Test</string>
 	<key>CFBundleExecutable</key>
@@ -14,6 +16,7 @@
 	<string>6.0</string>
 	<key>CFBundleName</key>
 	<string>chill_talk_test</string>
+	<string>UIInterfaceOrientationPortrait</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
