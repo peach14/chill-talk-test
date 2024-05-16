@@ -1,12 +1,17 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get/get.dart';
 
-class TextFormFieldCustom extends ConsumerStatefulWidget {
+import '../../auth/view_model/login_view_model.dart';
+
+enum FormType { email, password }
+
+class TextFormFieldCustom extends GetView<LoginViewModel> {
   const TextFormFieldCustom({
     super.key,
-    this.controller,
+    this.controllers,
+    this.formType,
     this.hintText,
     this.hintStyle,
     this.textStyle,
@@ -29,7 +34,7 @@ class TextFormFieldCustom extends ConsumerStatefulWidget {
     this.iconSubmit,
   });
 
-  final TextEditingController? controller;
+  final TextEditingController? controllers;
   final String? hintText;
   final String? label;
   final String? field;
@@ -39,7 +44,7 @@ class TextFormFieldCustom extends ConsumerStatefulWidget {
   final String? prefixIcon;
   final bool? isPassword;
   final bool? enablePassword;
-  final Widget? suffixIcon;
+  final suffixIcon;
   final double? height;
   final double? width;
   final Color? backgroundColor;
@@ -50,152 +55,180 @@ class TextFormFieldCustom extends ConsumerStatefulWidget {
   final TextInputType? textInputType;
   final void Function()? onPressed;
   final Icon? iconSubmit;
+  final FormType? formType;
 
   @override
-  ConsumerState<TextFormFieldCustom> createState() =>
-      _TextFormFieldCustomState();
-}
+  build(BuildContext context) {
+    bool showPassword = false;
 
-class _TextFormFieldCustomState extends ConsumerState<TextFormFieldCustom> {
-  bool showPassword = false;
-
-  @override
-  Widget build(BuildContext context) {
     return FormField(
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      validator: widget.validator ??
+      autovalidateMode: AutovalidateMode.always,
+      validator: validator ??
           (value) {
             if (value is String) {
-              return (value.isNotEmpty) ? null : "Cannot be null";
+              return (value.isNotEmpty) ? null : "กรุณากรอกข้อมูล";
             }
             return null;
           },
-      initialValue: widget.controller?.text,
+      initialValue: controllers?.text,
       builder: (FormFieldState<dynamic> field) {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            widget.label != null
-                ? Text(widget.label ?? '',
-                    style: const TextStyle(
-                        height: 1.5,
-                        fontSize: 15,
-                        color: Color(0xff1a6cae),
-                        fontWeight: FontWeight.bold))
-                : const SizedBox.shrink(),
-            SizedBox(
-              height: widget.height,
-              width: widget.width,
-              child: TextFormField(
-                focusNode: widget.focusNode,
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                onChanged: widget.onChanged ??
-                    (value) {
-                      log("1111111111111111111$value");
-                      field.didChange(value);
-                    },
-                keyboardType: widget.textInputType,
-                controller: widget.controller,
-                style: widget.textStyle,
-                decoration: InputDecoration(
-                    // enabled: true,
-                    filled: true,
-                    fillColor: widget.backgroundColor ?? Colors.white38,
-                    disabledBorder: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(12)),
-                        borderSide: BorderSide(color: Colors.white38)),
-                    enabledBorder: OutlineInputBorder(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(12)),
-                        borderSide: BorderSide(
-                            width: 1.3,
-                            color: field.hasError
-                                ? Colors.red
-                                : widget.broderColor ??
-                                    const Color(0xff1a6cae))),
-                    focusedBorder: OutlineInputBorder(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(12)),
-                        borderSide: BorderSide(
-                            color: field.hasError ? Colors.red : Colors.green)),
-                    border: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(12)),
-                        borderSide: BorderSide(color: Color(0xff1a6cae))),
-                    hintStyle: widget.hintStyle,
-                    isDense: true,
-                    contentPadding: EdgeInsets.fromLTRB(
-                        24,
-                        0,
-                        0,
-                        widget.isPassword == true
-                            ? MediaQuery.of(context).size.height * 0.025
-                            : MediaQuery.of(context).size.height * 0),
-                    hintText: widget.hintText,
-                    prefixIcon: widget.prefixIcon != null
-                        ? Container(
-                            margin: const EdgeInsets.only(left: 20, right: 16),
-                            width: 24,
-                            //  height: 10,
-                            decoration: ShapeDecoration(
-                              image: DecorationImage(
-                                image: AssetImage(widget.prefixIcon ?? ""),
-                                fit: BoxFit.scaleDown,
-                              ),
-                              shape: const RoundedRectangleBorder(),
-                            ),
-                          )
-                        : null,
-                    // suffixIconConstraints: BoxConstraints(
-                    //   minWidth: 24.spMin,
-                    //   maxWidth: 60.spMax,
-                    // ),
-                    // prefixIconConstraints: BoxConstraints(
-                    //   minWidth: 24.spMin,
-                    //   maxWidth: 60.spMax,
-                    // ),
-                    suffixIcon: widget.isPassword == true
-                        ? IconButton(
-                            onPressed: widget.onPressed ??
-                                () {
-                                  setState(() {
-                                    showPassword = !showPassword;
-                                  });
-                                },
-                            icon: widget.iconSubmit ??
-                                Icon(
-                                    size: 24,
-                                    color: Colors.deepOrange,
-                                    showPassword
-                                        ? Icons.visibility
-                                        : Icons.visibility_off))
-                        : const SizedBox()),
-                obscureText: widget.isPassword == true
-                    ? widget.iconSubmit != null
-                        ? false
-                        : showPassword
-                            ? false
-                            : true
-                    : false,
-              ),
-            ),
-            if (field.hasError)
-              Padding(
-                padding: const EdgeInsets.only(top: 3),
-                child: Text(
-                  field.errorText ?? '',
-                  style: const TextStyle(
-                    color: Colors.red,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                  ),
+        return Obx(() {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              label != null
+                  ? Text(label ?? '',
+                      style: const TextStyle(
+                          height: 1.5,
+                          fontSize: 15,
+                          color: Color(0xff1a6cae),
+                          fontWeight: FontWeight.bold))
+                  : const SizedBox.shrink(),
+              SizedBox(
+                height: height,
+                width: width,
+                child: TextFormField(
+                  focusNode: focusNode,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  onChanged: onChanged ??
+                      (value) {
+                        log("1111111111111111111$value");
+                        field.didChange(value);
+                      },
+                  keyboardType: textInputType,
+                  controller: controllers,
+                  style: textStyle,
+                  decoration: FormType.email == formType
+                      ? inputDecoration(
+                          value: controller.validEmail.value,
+                          context: context,
+                          controller: controller)
+                      : inputDecoration(
+                          value: controller.validPass.value,
+                          context: context,
+                          controller: controller),
+                  obscureText: isPassword == true
+                      ? iconSubmit != null
+                          ? false
+                          : showPassword
+                              ? false
+                              : true
+                      : false,
                 ),
               ),
-            const SizedBox(
-              height: 32,
-            )
-          ],
-        );
+              FormType.email == formType
+                  ? controller.validEmail.value
+                      ? const Padding(
+                          padding: EdgeInsets.only(top: 3),
+                          child: Text(
+                            "กรุณากรอกข้อมูล",
+                            style: TextStyle(color: Colors.red),
+                          ),
+                        )
+                      : const SizedBox.shrink()
+                  : const SizedBox.shrink(),
+              FormType.password == formType
+                  ? controller.validPass.value
+                      ? const Padding(
+                          padding: EdgeInsets.only(top: 3),
+                          child: Text(
+                            "กรุณากรอกข้อมูล",
+                            style: TextStyle(color: Colors.red),
+                          ),
+                        )
+                      : const SizedBox.shrink()
+                  : const SizedBox.shrink(),
+              if (field.hasError)
+                Padding(
+                  padding: const EdgeInsets.only(top: 3),
+                  child: Text(
+                    field.errorText ?? '',
+                    style: const TextStyle(
+                      color: Colors.red,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ),
+              const SizedBox(
+                height: 32,
+              )
+            ],
+          );
+        });
       },
     );
+  }
+
+  InputDecoration inputDecoration(
+      {required bool value,
+      required BuildContext context,
+      required LoginViewModel controller}) {
+    return InputDecoration(
+        // enabled: true,
+        filled: true,
+        fillColor: backgroundColor ?? Colors.white38,
+        disabledBorder: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(12)),
+            borderSide: BorderSide(color: Colors.white38)),
+        enabledBorder: OutlineInputBorder(
+            borderRadius: const BorderRadius.all(Radius.circular(12)),
+            borderSide: BorderSide(
+                width: 1.3,
+                color: value || controller.resError.value.status == 0
+                    ? Colors.red
+                    : broderColor ?? const Color(0xff1a6cae))),
+        focusedBorder: OutlineInputBorder(
+            borderRadius: const BorderRadius.all(Radius.circular(12)),
+            borderSide: BorderSide(color: value ? Colors.red : Colors.green)),
+        border: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(12)),
+            borderSide: BorderSide(color: Color(0xff1a6cae))),
+        hintStyle: hintStyle,
+        isDense: true,
+        contentPadding: EdgeInsets.fromLTRB(
+            24,
+            0,
+            0,
+            isPassword == true
+                ? MediaQuery.of(context).size.height * 0.025
+                : MediaQuery.of(context).size.height * 0),
+        hintText: hintText,
+        prefixIcon: prefixIcon != null
+            ? Container(
+                margin: const EdgeInsets.only(left: 20, right: 16),
+                width: 24,
+                //  height: 10,
+                decoration: ShapeDecoration(
+                  image: DecorationImage(
+                    image: AssetImage(prefixIcon ?? ""),
+                    fit: BoxFit.scaleDown,
+                  ),
+                  shape: const RoundedRectangleBorder(),
+                ),
+              )
+            : null,
+        // suffixIconConstraints: BoxConstraints(
+        //   minWidth: 24.spMin,
+        //   maxWidth: 60.spMax,
+        // ),
+        // prefixIconConstraints: BoxConstraints(
+        //   minWidth: 24.spMin,
+        //   maxWidth: 60.spMax,
+        // ),
+        suffixIcon: isPassword == true
+            ? IconButton(
+                onPressed: onPressed ??
+                    () {
+                      // setState(() {
+                      //   showPassword = !showPassword;
+                      // });
+                    },
+                icon: iconSubmit ??
+                    const Icon(
+                        size: 24,
+                        color: Colors.deepOrange,
+                        true ? Icons.visibility : Icons.visibility_off))
+            : const SizedBox());
   }
 }

@@ -1,3 +1,4 @@
+import 'package:chill_talk_test/main/view_model/bindings/app_binding.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -7,7 +8,6 @@ import 'package:responsive_framework/responsive_wrapper.dart';
 import 'package:responsive_framework/utils/scroll_behavior.dart';
 
 import 'base/config/routing/route.dart';
-import 'main/view_model/bindings/app_binding.dart';
 
 void main() {
   WidgetsFlutterBinding
@@ -36,6 +36,7 @@ class MyApp extends GetView {
   @override
   Widget build(BuildContext context) {
     Get.put(AppRouterProvider());
+
     final route = Get.find<AppRouterProvider>();
     return GetMaterialApp.router(
       initialBinding: AppBinding(),

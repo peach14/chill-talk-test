@@ -1,4 +1,5 @@
 import 'package:chill_talk_test/base/component/custom_time.dart';
+import 'package:chill_talk_test/calender/view_model/calender_view_model.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -6,17 +7,11 @@ import 'package:go_router/go_router.dart';
 
 import '../../../base/component/custom_dropdown.dart';
 import '../../../base/component/text_form_field_custom.dart';
+import '../../base/component/text_filed_form_details.dart';
 import '../../base/utils/constants/asset_phat.dart';
-import '../../main/view_model/app_view_model.dart';
 
 class AddNoteScreen extends GetView<AppViewModel> {
   const AddNoteScreen({super.key});
-
-  // String dateFormat = DateFormat('EEEE d MMMM y', 'th').format(DateTime(
-  //   DateTime.now().year + 543,
-  //   DateTime.now().month,
-  //   DateTime.now().day,
-  // ));
 
   @override
   Widget build(BuildContext context) {
@@ -86,12 +81,16 @@ class AddNoteScreen extends GetView<AppViewModel> {
                         color: Color(0xff1a6cae),
                         fontWeight: FontWeight.bold),
                   ),
-                  const Row(
+                  Row(
                     children: [
                       Expanded(
                         child: CustomDropDown(
+                          onChanged: (value) {
+                            controller.setTypeText(date: value ?? '');
+                            print(value);
+                          },
                           isExpanded: true,
-                          item: ["asdas", "asdasd", "asd"],
+                          item: const ["asdas", "asdasd", "asd"],
                           direction: DropdownDirection.textDirection,
                         ),
                       ),
@@ -99,6 +98,12 @@ class AddNoteScreen extends GetView<AppViewModel> {
                   ),
                   const SizedBox(height: 20),
                   TextFormFieldCustom(
+                    onChanged: (value) {
+                      controller.setTitleText(date: value ?? '');
+
+                      print(value);
+                      return null;
+                    },
                     broderColor: Colors.grey.shade400,
                     label: "หัวข้อ",
                   ),
@@ -156,130 +161,120 @@ class AddNoteScreen extends GetView<AppViewModel> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          GetBuilder<AppViewModel>(
-                              builder: (controllers) => Material(
-                                    borderRadius: BorderRadius.circular(20),
-                                    child: InkWell(
-                                        borderRadius: BorderRadius.circular(20),
-                                        onTap: () async {
-                                          //  DateTime selectDate = DateTime.now();
+                          Material(
+                            borderRadius: BorderRadius.circular(20),
+                            child: InkWell(
+                                borderRadius: BorderRadius.circular(20),
+                                onTap: () async {
+                                  //  DateTime selectDate = DateTime.now();
 
-                                          final DateTime? datetime =
-                                              await showDatePicker(
-                                                  confirmText: "ตกลง",
-                                                  cancelText: 'ยกเลิก',
-                                                  context: context,
-                                                  helpText: 'วันที่เริ่มลา',
-                                                  locale: const Locale('th'),
-                                                  initialDate: controllers
-                                                      .startDate.value,
-                                                  builder: (context, child) {
-                                                    return Theme(
-                                                      data: ThemeData.light()
-                                                          .copyWith(
-                                                        colorScheme:
-                                                            const ColorScheme
-                                                                .light(
-                                                          onBackground:
-                                                              Colors.blue,
-                                                          primary: Colors
-                                                              .blue, // Header background color
-                                                          onPrimary: Colors
-                                                              .white, // Header text color
-                                                          onSurface: Colors
-                                                              .black, // Body text color
-                                                        ),
-                                                        textButtonTheme:
-                                                            TextButtonThemeData(
-                                                          style: TextButton
-                                                              .styleFrom(
-                                                            foregroundColor: Colors
-                                                                .black, // Button text color
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      child: child!,
-                                                    );
-                                                  },
-                                                  firstDate: DateTime(2000),
-                                                  lastDate: DateTime(3000));
-                                          if (datetime != null) {
-                                            // setState(() {
-                                            //   selectDate = datetime;
-                                            // });
-
-                                            // formattedDate = formattedDate.replaceAll(
-                                            //     selectDate.year.toString(),
-                                            //     selectDate.toString());
-                                            controllers.setStartDate(
-                                                date: datetime);
-                                            // controllers.startDate.value =
-                                            //     datetime;
-
-                                            await Future.delayed(
-                                                const Duration(seconds: 1));
-
-                                            final DateTime? datetimeEnd =
-                                                await showDatePicker(
-                                              confirmText: "ตกลง",
-                                              cancelText: 'ยกเลิก',
-                                              context: context,
-                                              helpText: 'วันสุดท้ายที่ลา',
-                                              //  initialDate: selectDate,
-                                              firstDate: DateTime(2000),
-                                              lastDate: DateTime(3000),
-                                              builder: (context, child) {
-                                                return Theme(
-                                                  data: ThemeData.light()
-                                                      .copyWith(
-                                                    colorScheme:
-                                                        const ColorScheme.light(
-                                                      onBackground: Colors.red,
-                                                      primary: Colors
-                                                          .red, // Header background color
-                                                      onPrimary: Colors
-                                                          .white, // Header text color
-                                                      onSurface: Colors
-                                                          .black, // Body text color
-                                                    ),
-                                                    textButtonTheme:
-                                                        TextButtonThemeData(
-                                                      style:
-                                                          TextButton.styleFrom(
-                                                        foregroundColor: Colors
-                                                            .black, // Button text color
-                                                      ),
-                                                    ),
+                                  final DateTime? datetime =
+                                      await showDatePicker(
+                                          confirmText: "ตกลง",
+                                          cancelText: 'ยกเลิก',
+                                          context: context,
+                                          helpText: 'วันที่เริ่มลา',
+                                          locale: const Locale('th'),
+                                          initialDate:
+                                              controller.startDate.value,
+                                          builder: (context, child) {
+                                            return Theme(
+                                              data: ThemeData.light().copyWith(
+                                                colorScheme:
+                                                    const ColorScheme.light(
+                                                  onBackground: Colors.blue,
+                                                  primary: Colors
+                                                      .blue, // Header background color
+                                                  onPrimary: Colors
+                                                      .white, // Header text color
+                                                  onSurface: Colors
+                                                      .black, // Body text color
+                                                ),
+                                                textButtonTheme:
+                                                    TextButtonThemeData(
+                                                  style: TextButton.styleFrom(
+                                                    foregroundColor: Colors
+                                                        .black, // Button text color
                                                   ),
-                                                  child: child!,
-                                                );
-                                              },
+                                                ),
+                                              ),
+                                              child: child!,
                                             );
-                                            // if (datetimeEnd != null) {
-                                            //   setState(() {
-                                            //     selectDate = datetimeEnd;
-                                            //   });
-                                            // }
-                                          }
-                                        },
-                                        child: Obx(() {
-                                          return Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 15),
-                                              child: Column(
-                                                children: [
-                                                  Text(
-                                                      "${controller.startDateFormat}"),
-                                                  const SizedBox(
-                                                    height: 20,
-                                                  ),
-                                                  const Text(
-                                                      "วันพฤหัสบดี 9 มิถุนายน 2565")
-                                                ],
-                                              ));
-                                        })),
-                                  )),
+                                          },
+                                          firstDate: DateTime(2000),
+                                          lastDate: DateTime(3000));
+                                  if (datetime != null) {
+                                    // setState(() {
+                                    //   selectDate = datetime;
+                                    // });
+
+                                    // formattedDate = formattedDate.replaceAll(
+                                    //     selectDate.year.toString(),
+                                    //     selectDate.toString());
+                                    controller.setStartDate(date: datetime);
+                                    // controllers.startDate.value =
+                                    //     datetime;
+
+                                    await Future.delayed(
+                                        const Duration(seconds: 1));
+
+                                    final DateTime? datetimeEnd =
+                                        await showDatePicker(
+                                      confirmText: "ตกลง",
+                                      cancelText: 'ยกเลิก',
+                                      context: context,
+                                      helpText: 'วันสุดท้ายที่ลา',
+                                      //  initialDate: selectDate,
+                                      firstDate: DateTime(2000),
+                                      lastDate: DateTime(3000),
+                                      builder: (context, child) {
+                                        return Theme(
+                                          data: ThemeData.light().copyWith(
+                                            colorScheme:
+                                                const ColorScheme.light(
+                                              onBackground: Colors.red,
+                                              primary: Colors
+                                                  .red, // Header background color
+                                              onPrimary: Colors
+                                                  .white, // Header text color
+                                              onSurface: Colors
+                                                  .black, // Body text color
+                                            ),
+                                            textButtonTheme:
+                                                TextButtonThemeData(
+                                              style: TextButton.styleFrom(
+                                                foregroundColor: Colors
+                                                    .black, // Button text color
+                                              ),
+                                            ),
+                                          ),
+                                          child: child!,
+                                        );
+                                      },
+                                    );
+                                    // if (datetimeEnd != null) {
+                                    //   setState(() {
+                                    //     selectDate = datetimeEnd;
+                                    //   });
+                                    // }
+                                  }
+                                },
+                                child: Obx(() {
+                                  return Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 15),
+                                      child: Column(
+                                        children: [
+                                          Text("${controller.startDateFormat}"),
+                                          const SizedBox(
+                                            height: 20,
+                                          ),
+                                          const Text(
+                                              "วันพฤหัสบดี 9 มิถุนายน 2565")
+                                        ],
+                                      ));
+                                })),
+                          ),
                           Material(
                             borderRadius: BorderRadius.circular(20),
                             child: InkWell(
@@ -395,33 +390,9 @@ class AddNoteScreen extends GetView<AppViewModel> {
                         color: Color(0xff1a6cae),
                         fontWeight: FontWeight.bold),
                   ),
-                  TextFormField(
-                      enabled: true,
-                      maxLines: null,
-                      textAlignVertical:
-                          TextAlignVertical.top, // align text to the top
-                      clipBehavior: Clip.antiAlias,
-                      decoration: InputDecoration(
-                        contentPadding:
-                            const EdgeInsets.only(left: 8, top: 8, bottom: 99),
-                        filled: true,
-                        fillColor: Colors.white38,
-                        disabledBorder: const OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(12)),
-                            borderSide: BorderSide(color: Colors.white38)),
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(12)),
-                            borderSide:
-                                BorderSide(color: Colors.grey.shade400)),
-                        focusedBorder: const OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(12)),
-                            borderSide: BorderSide(color: Colors.green)),
-                        border: const OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(12)),
-                            borderSide: BorderSide(color: Color(0xff1a6cae))),
-                        // isDense: true,
-                      )),
+                  TextFiledFormDetails(
+                    onChanged: (String value) {},
+                  ),
                 ],
               ),
             ),

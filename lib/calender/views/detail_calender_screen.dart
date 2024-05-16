@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../base/utils/constants/asset_phat.dart';
+import '../model/model_carender.dart';
 
 class DetailCalenderScreen extends StatefulWidget {
-  const DetailCalenderScreen({super.key, required this.note});
+  const DetailCalenderScreen({
+    super.key,
+  });
 
-  final String note;
   @override
   State<DetailCalenderScreen> createState() => _DetailCalenderScreenState();
 }
@@ -13,6 +16,17 @@ class DetailCalenderScreen extends StatefulWidget {
 class _DetailCalenderScreenState extends State<DetailCalenderScreen> {
   @override
   Widget build(BuildContext context) {
+    Object? extra = GoRouterState.of(context).extra;
+
+    ModelCarender? data;
+
+    if (extra is ModelCarender) {
+      data = extra;
+      print(data.type);
+    } else {
+      print('Extra is not of type ModelCarender');
+    }
+
     return Scaffold(
       appBar: AppBar(
         leading: InkWell(
@@ -21,18 +35,18 @@ class _DetailCalenderScreenState extends State<DetailCalenderScreen> {
               Navigator.pop(context);
             },
             child: Image.asset(IconPhat.backButton)),
-        title: Text(widget.note, style: const TextStyle(fontSize: 20)),
+        title: Text(data?.type ?? "", style: const TextStyle(fontSize: 20)),
       ),
       body: Container(
         padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 32),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "ศุกร์, 10 มิถุนายน 2565",
+                  data?.date ?? '',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
                 ),
                 Text(
@@ -41,10 +55,10 @@ class _DetailCalenderScreenState extends State<DetailCalenderScreen> {
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 16,
             ),
-            Text(
+            const Text(
               "นัดหมาย",
               style: TextStyle(
                   color: Color(0xff1a6cae),

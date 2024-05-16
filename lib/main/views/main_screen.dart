@@ -6,6 +6,8 @@ import 'package:go_router/go_router.dart';
 import '../../base/component/base_scaffold_main.dart';
 import '../../base/component/custom_bottom_home.dart';
 import '../../base/component/custom_button_main.dart';
+import '../../base/config/routing/route_path.dart';
+import '../../base/service/local_storage/secure_storage_service.dart';
 import '../../base/utils/constants/asset_phat.dart';
 
 class MainScreen extends GetView<RecordWorkViewModel> {
@@ -109,7 +111,8 @@ class MainScreen extends GetView<RecordWorkViewModel> {
                   // setState(() {
                   //   _position = null;
                   // });
-                  context.go('/');
+                  SecureStorage.instance.deleteToken();
+                  context.go(kNevDefault);
                 },
               ),
               const Spacer(),
@@ -124,28 +127,34 @@ class MainScreen extends GetView<RecordWorkViewModel> {
             const Spacer(),
             CustomIconButtonMain(
               onTap: () {
-                context.go('/calender');
+                context.push(kNevCalender);
               },
               text: 'ปฎิทิน',
               icon: IconPhat.calendarToday,
             ),
             CustomIconButtonMain(
               onTap: () {
-                context.go('/addNote');
+                context.push(kNevAddNote);
+
+                //   context.go('/addNote');
               },
               text: 'แจ้งลา',
               icon: IconPhat.frame_32,
             ),
             CustomIconButtonMain(
               onTap: () {
-                context.go('/history');
+                context.push(kNevHistory);
+
+                // context.go('/history');
               },
               text: 'ประวัติ',
               icon: IconPhat.frame_32_2,
             ),
             CustomIconButtonMain(
               onTap: () {
-                context.go('/reportProBlem');
+                context.push(kNevReportProBlem);
+
+                //  context.go('/reportProBlem');
               },
               text: 'แจ้งปัญหา',
               icon: (IconPhat.nextWeek),

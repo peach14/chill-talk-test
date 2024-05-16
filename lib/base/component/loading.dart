@@ -1,8 +1,6 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_circular_text/circular_text.dart';
-import 'package:google_fonts/google_fonts.dart';
+
+import '../utils/constants/asset_phat.dart';
 
 class Loading extends StatefulWidget {
   final double height;
@@ -20,73 +18,51 @@ class Loading extends StatefulWidget {
   State<Loading> createState() => _LoadingState();
 }
 
-class _LoadingState extends State<Loading> with TickerProviderStateMixin {
-  AnimationController? animationController;
-  late Animation<double> animation;
+class _LoadingState extends State<Loading> with SingleTickerProviderStateMixin {
+  late AnimationController animationController;
+  late Animation<double> opacityAnimation;
 
   @override
   void initState() {
     super.initState();
 
     animationController = AnimationController(
-      duration: const Duration(milliseconds: 3000),
+      duration:
+          const Duration(milliseconds: 2500), // Adjust the duration as needed
       vsync: this,
     );
 
-    animation =
-        Tween<double>(begin: 0, end: 2 * pi).animate(animationController!);
+    // Define the tween for opacity animation
+    opacityAnimation = Tween<double>(begin: 1.0, end: 0.0).animate(
+        CurvedAnimation(parent: animationController, curve: Curves.easeInOut));
 
-    animationController!.addStatusListener((status) {
+    // Set up the animation to loop
+    animationController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        animationController!.reset();
-        animationController!.forward();
+        animationController.reverse();
+      } else if (status == AnimationStatus.dismissed) {
+        animationController.forward();
       }
     });
 
-    animationController!.forward();
+    // Start the animation
+    animationController.forward();
   }
 
   @override
   void dispose() {
-    animationController!.dispose();
+    animationController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: animationController!,
-      child: SizedBox(
-        height: 190,
-        width: 190,
-        child: CircularText(
-            radius: 60,
-            //  backgroundPaint: Paint()..color = Colors.pink,
-            children: [
-              TextItem(
-                  text: Text(
-                "Chill talk",
-                style: GoogleFonts.zenTokyoZoo(
-                  color: Colors.amber,
-                  shadows: [
-                    const BoxShadow(
-                      color: Colors.amber,
-                      offset: Offset(
-                        1.0,
-                        1.0,
-                      ),
-                      blurRadius: 20.0,
-                      spreadRadius: 20.0,
-                    )
-                  ],
-                ),
-              ))
-            ]),
-      ),
+      animation: animationController,
       builder: (context, child) {
-        return RotationTransition(
-          turns: Tween<double>(begin: 0, end: 1).animate(animationController!),
-          child: child,
+        return Opacity(
+          opacity: opacityAnimation.value, // Use the animated opacity value
+          child: Image.asset(scale: 1, ImagePhat.logoChillTalk),
         );
       },
     );

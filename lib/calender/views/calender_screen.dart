@@ -2,15 +2,20 @@ import 'package:cell_calendar/cell_calendar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 
+import '../../base/component/dialog_alert.dart';
 import '../../base/utils/constants/asset_phat.dart';
-import '../../main/view_model/app_view_model.dart';
+import '../../main/view_model/bindings/app_binding.dart';
+import '../model/model_carender.dart';
+import '../view_model/calender_view_model.dart';
 
 class CalenderScreen extends GetView<AppViewModel> {
   const CalenderScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    Get.put<AppBinding>(AppBinding());
     final events = controller.sampleEvents;
     return Scaffold(
       appBar: AppBar(
@@ -20,6 +25,7 @@ class CalenderScreen extends GetView<AppViewModel> {
 
               // borderRadius: BorderRadius.all(Radius.zero),
               onTap: () {
+                // context.pushReplacement(kNevMain);
                 context.pop();
               },
               child: Image.asset(IconPhat.backButton)),
@@ -34,21 +40,23 @@ class CalenderScreen extends GetView<AppViewModel> {
                 child: const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Text("อา."),
-                    Text("จ."),
-                    Text("อ."),
-                    Text("พ."),
-                    Text("พฤ."),
-                    Text("ศ."),
-                    Text("ส."),
+                    Text("อา.", style: TextStyle(color: Colors.white)),
+                    Text("จ.", style: TextStyle(color: Colors.white)),
+                    Text("อ.", style: TextStyle(color: Colors.white)),
+                    Text("พ.", style: TextStyle(color: Colors.white)),
+                    Text("พฤ.", style: TextStyle(color: Colors.white)),
+                    Text("ศ.", style: TextStyle(color: Colors.white)),
+                    Text("ส.", style: TextStyle(color: Colors.white)),
                   ],
                 ),
               ))),
       body: GetBuilder<AppViewModel>(
+        init: AppViewModel(),
         builder: (AppViewModel controllerss) {
-          controller.sampleEvents.value.forEach((element) {
-            print(element.eventName);
-          });
+          // controller.sampleEvents.value.forEach((element) {
+          //   print(element.eventName);
+          // });
+          //   final clr = Get.find<AppViewModel>();
           return CellCalendar(
             cellCalendarPageController: controllerss.cellCalendarPageController,
             events: controllerss.sampleEvents,
@@ -74,11 +82,42 @@ class CalenderScreen extends GetView<AppViewModel> {
                     eventDate.month == date.month &&
                     eventDate.day == date.day;
               }).toList();
-              String note = '';
 
-              eventsOnTheDate.forEach((element) {
-                note = element.eventName;
-              });
+              try {
+                String type = eventsOnTheDate.first.eventName;
+                String title = eventsOnTheDate.last.eventName;
+
+                String dataDate =
+                    DateFormat('EEEE d MMMM y', 'th').format(DateTime(
+                  eventsOnTheDate.first.eventDate.year + 543,
+                  eventsOnTheDate.first.eventDate.month,
+                  eventsOnTheDate.first.eventDate.day,
+                ));
+
+                context.push('/detail',
+                    extra: ModelCarender(
+                        type: type, title: title, date: dataDate, time: ''));
+              } catch (e) {
+                // print(object)
+                // String dataDate =
+                // DateFormat('EEEE d MMMM y', 'th').format(DateTime(
+                //   eventsOnTheDate.first.eventDate.year + 543,
+                //   eventsOnTheDate.first.eventDate.month,
+                //   eventsOnTheDate.first.eventDate.day,
+                // ));
+                // print(dataDate);
+
+                dialogAlert(
+                  context: context,
+                  content: const Text("ไม่มีนัดหมาย"),
+                  titleIcon: Text("Data"),
+                  onTap: () {
+                    Navigator.pop(context);
+                    // Reset isDialogShown when dialog is dismissed
+                  },
+                );
+                print("555555555555555555555");
+              }
             },
             onPageChanged: (firstDate, lastDate) {},
           );
@@ -124,7 +163,7 @@ class CalenderScreen extends GetView<AppViewModel> {
             //     // sampleEvents(head: "asdasd", startDate: selectDate);
             //   });
             // }
-
+            controller.setDispod();
             context.push("/addNote");
           }),
     );

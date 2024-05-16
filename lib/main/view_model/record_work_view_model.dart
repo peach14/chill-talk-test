@@ -3,9 +3,15 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
+import '../../auth/model/response_login_model.dart';
 import '../../base/component/dialog_alert.dart';
+import '../../base/service/local_storage/secure_storage_service.dart';
+import '../../base/utils/constants/constants.dart';
+import '../model/request_record_model.dart';
+import '../service/record_work_service.dart';
 
 class RecordWorkViewModel extends GetxController {
   Position? _position;
@@ -28,38 +34,40 @@ class RecordWorkViewModel extends GetxController {
     print(">>>>>>>>>>>> : $_position");
 
     if (_position != null) {
-      if (_position!.latitude > 32.00 && _position!.longitude > -122) {
+      final getRespLogin = await SecureStorage.instance.read(kResponseLogin);
+      final respLogin = responseModelLoginFromJson(getRespLogin ?? '');
+      final res = await RecordService.instance.recordWork(
+          requestModel: RespModelRecordWork(
+              centerCode: respLogin.centerCode,
+              userCode: respLogin.userCode,
+              latitude: _position!.latitude.toString(),
+              longitude: _position!.longitude.toString()),
+          context: context);
+      print(res);
+      //  final response = errorModelLoginFromJson(res);
+      print(respLogin.centerCode);
+      print(respLogin.userCode);
+      print(_position!.latitude.toString());
+      print(_position!.longitude.toString());
+      if (2 == 1) {
         dialogAlert(
           context: context,
-          content: const Text("not in area"),
+          content: Text("response.message"),
           onTap: () {
-            Navigator.pop(context);
+            // Navigator.pop(context);
+            context.pop();
             // Reset isDialogShown when dialog is dismissed
             isDialogShown = false;
           },
         );
       } else {
-        // Get.dialog(
-        //   AlertDialog(
-        //     title: const Text('success'),
-        //     content: const Text('success'),
-        //     actions: [
-        //       TextButton(
-        //         onPressed: () {
-        //           Get.back(); // Close the dialog
-        //           isDialogShown = false;
-        //         },
-        //         child: const Text('OK'),
-        //       ),
-        //     ],
-        //   ),
-        // );
-
         dialogAlert(
           context: context,
           content: const Text("success"),
           onTap: () {
-            Navigator.pop(context);
+            context.pop();
+
+            //  Navigator.pop(context);
             // Reset isDialogShown when dialog is dismissed
             isDialogShown = false;
           },
@@ -100,31 +108,3 @@ class RecordWorkViewModel extends GetxController {
     super.onInit();
   }
 }
-
-// void loadDing() {
-//   // Show the loading dialog if checkAuth is false
-//   if (mounted) {
-//     showDialog(
-//       context: context,
-//       builder: (context) => Center(
-//         child: Container(
-//           decoration: BoxDecoration(
-//             color: Colors.white,
-//             borderRadius: BorderRadius.circular(90),
-//           ),
-//           child: const Loading(),
-//         ),
-//       ),
-//     );
-//   }
-//   Future<void> waitAndCloseDialog() async {
-//     while (!checkAuth) {
-//       await Future.delayed(const Duration(milliseconds: 200));
-//     }
-//     if (mounted) {
-//       Navigator.pop(context);
-//     }
-//   }
-//
-//   waitAndCloseDialog();
-// }
