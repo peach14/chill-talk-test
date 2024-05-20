@@ -54,7 +54,7 @@ class LoginViewModel extends GetxController {
   }
 
   void login({required BuildContext context}) async {
-    final res = await LoginService.instance.login(
+    final res = await LoginService.instance.repoLogin(
         requestModel:
             RequestModel(username: 'test@nnmail.com', password: 123456),
         context: context);

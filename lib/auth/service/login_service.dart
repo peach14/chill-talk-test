@@ -12,7 +12,7 @@ class LoginService {
   LoginService._();
   static final instance = LoginService._();
 
-  Future<String> login({
+  Future<String> repoLogin({
     required RequestModel requestModel,
     required BuildContext context,
   }) async {

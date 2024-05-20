@@ -1,21 +1,18 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../base/service/base/api_endpoints.dart';
 import '../../base/service/base/base_api_service.dart';
-import '../model/request_record_model.dart';
+import '../model/request_problem_model.dart';
 
-class RecordService {
-  RecordService._();
-  static final instance = RecordService._();
+class ProblemService {
+  ProblemService._();
+  static final instance = ProblemService._();
 
-  Future<String> repoRecordWork({
-    required RespModelRecordWork requestModel,
-    required BuildContext context,
-  }) async {
+  Future<String> repoProblem(
+      {required BuildContext context,
+      required RequestProblemModel requestProblemModel}) async {
     // Show the loading dialog immediately
     showDialog(
       barrierColor: Colors.transparent,
@@ -29,15 +26,15 @@ class RecordService {
       ),
     );
 
+    // Perform the request
     final res = await Get.find<BaseApiService>().postRequest(
-      url: ApiEndPoints.instan.checkRecordWord,
-      body: respModelRecordWorkToJson(data: requestModel),
+      url: ApiEndPoints.instan.insertProblem,
+      body: requestProblemModelToJson(data: requestProblemModel),
       context: context,
     );
     context.pop();
     print(">>>>>>>>>>>>>>>>>>>>res>>$res");
 
     return res.toString();
-    ;
   }
 }

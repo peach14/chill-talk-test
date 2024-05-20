@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-ErrorModelRecord errorModelLoginFromJson(String str) =>
+ErrorModelRecord errorModelRecordFromJson(String str) =>
     ErrorModelRecord.fromJson(json.decode(str));
 
-String errorModelLoginToJson(ErrorModelRecord data) =>
+String errorModelRecordToJson(ErrorModelRecord data) =>
     json.encode(data.toJson());
 
 class ErrorModelRecord {

@@ -10,7 +10,7 @@ import '../../../base/component/text_form_field_custom.dart';
 import '../../base/component/text_filed_form_details.dart';
 import '../../base/utils/constants/asset_phat.dart';
 
-class AddNoteScreen extends GetView<AppViewModel> {
+class AddNoteScreen extends GetView<CalenderViewModel> {
   const AddNoteScreen({super.key});
 
   @override
@@ -38,7 +38,9 @@ class AddNoteScreen extends GetView<AppViewModel> {
               child: InkWell(
                 borderRadius: BorderRadius.circular(8),
                 onTap: () {
-                  controller.addEvenDate();
+                  //  controller.addEvenDate();
+                  //  controller.loadDataCalender();
+                  controller.setDateTest();
                   context.pop();
                 },
                 child: Container(
@@ -223,8 +225,8 @@ class AddNoteScreen extends GetView<AppViewModel> {
                                       confirmText: "ตกลง",
                                       cancelText: 'ยกเลิก',
                                       context: context,
-                                      helpText: 'วันสุดท้ายที่ลา',
-                                      //  initialDate: selectDate,
+                                      helpText: 'วันสุดท้าย',
+                                      initialDate: controller.endDate.value,
                                       firstDate: DateTime(2000),
                                       lastDate: DateTime(3000),
                                       builder: (context, child) {
@@ -252,11 +254,9 @@ class AddNoteScreen extends GetView<AppViewModel> {
                                         );
                                       },
                                     );
-                                    // if (datetimeEnd != null) {
-                                    //   setState(() {
-                                    //     selectDate = datetimeEnd;
-                                    //   });
-                                    // }
+                                    if (datetimeEnd != null) {
+                                      controller.setEndDate(date: datetimeEnd);
+                                    }
                                   }
                                 },
                                 child: Obx(() {
@@ -269,8 +269,7 @@ class AddNoteScreen extends GetView<AppViewModel> {
                                           const SizedBox(
                                             height: 20,
                                           ),
-                                          const Text(
-                                              "วันพฤหัสบดี 9 มิถุนายน 2565")
+                                          Text("${controller.endDateFormat}")
                                         ],
                                       ));
                                 })),
@@ -391,7 +390,9 @@ class AddNoteScreen extends GetView<AppViewModel> {
                         fontWeight: FontWeight.bold),
                   ),
                   TextFiledFormDetails(
-                    onChanged: (String value) {},
+                    onChanged: (String value) {
+                      controller.setTextNote(note: value);
+                    },
                   ),
                 ],
               ),

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:connectivity/connectivity.dart';
 import 'package:dio/dio.dart';
@@ -30,10 +31,8 @@ class BaseApiService extends GetConnect {
     if (connectivityResult != ConnectivityResult.none) {
       try {
         //await Future.delayed(const Duration(seconds: 10));
-        print(">>>>>>>>>>>>>>>${body.runtimeType}<<<<<<<<<<<<<<<<<<");
         final deCode = json.decode(body) as Map;
-
-        final aa = await _dio.post(
+        return await _dio.post(
           url,
           data: deCode,
           options: Options(
@@ -42,10 +41,8 @@ class BaseApiService extends GetConnect {
             },
           ),
         );
-        print("BASE>>>>>>>>>>>>>>>>>>>$aa");
-        return aa;
       } catch (e) {
-        print("BESE_API>>>> ERROE>>>>>>>>>>>>$e");
+        log("BESE_API>>>> ERROE>>>>>>>>>>>>$e");
       }
     } else {
       dialogAlert(

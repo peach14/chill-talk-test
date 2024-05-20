@@ -32,7 +32,7 @@ class _DetailCalenderScreenState extends State<DetailCalenderScreen> {
         leading: InkWell(
             borderRadius: BorderRadius.circular(50),
             onTap: () {
-              Navigator.pop(context);
+              context.pop();
             },
             child: Image.asset(IconPhat.backButton)),
         title: Text(data?.type ?? "", style: const TextStyle(fontSize: 20)),
@@ -47,9 +47,10 @@ class _DetailCalenderScreenState extends State<DetailCalenderScreen> {
               children: [
                 Text(
                   data?.date ?? '',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
+                  style: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.w400),
                 ),
-                Text(
+                const Text(
                   "10:00",
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
                 ),
@@ -68,7 +69,7 @@ class _DetailCalenderScreenState extends State<DetailCalenderScreen> {
             const SizedBox(
               height: 8,
             ),
-            Text("Weekly meeting Chill",
+            Text(data?.note ?? '',
                 style: TextStyle(
                     color: Colors.grey.shade500,
                     fontSize: 14,

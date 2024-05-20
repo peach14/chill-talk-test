@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../auth/view_model/data_client_view_model.dart';
 import '../../base/component/base_scaffold_main.dart';
 import '../../base/component/custom_bottom_home.dart';
 import '../../base/component/custom_button_main.dart';
@@ -15,6 +16,8 @@ class MainScreen extends GetView<RecordWorkViewModel> {
 
   @override
   Widget build(BuildContext context) {
+    Get.put<DataClientViewModel>(DataClientViewModel());
+
     return BaseScaffoldMain(
       bodyTop: SafeArea(
         child: Row(
@@ -58,11 +61,16 @@ class MainScreen extends GetView<RecordWorkViewModel> {
                 const SizedBox(
                   height: 8,
                 ),
-                const Text("กมลพร ชัยเลิศจิต",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600)),
+                GetBuilder<DataClientViewModel>(
+                  builder: (controller) {
+                    return Text(
+                        "${controller.data?.name ?? ''} ${controller.data?.surname ?? ''}",
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600));
+                  },
+                ),
                 const SizedBox(
                   height: 8,
                 ),
@@ -108,9 +116,6 @@ class MainScreen extends GetView<RecordWorkViewModel> {
                 textColor: const Color(0xff1a6cae),
                 text: 'บันทึก\nออกงาน',
                 onTap: () {
-                  // setState(() {
-                  //   _position = null;
-                  // });
                   SecureStorage.instance.deleteToken();
                   context.go(kNevDefault);
                 },
@@ -127,7 +132,7 @@ class MainScreen extends GetView<RecordWorkViewModel> {
             const Spacer(),
             CustomIconButtonMain(
               onTap: () {
-                context.push(kNevCalender);
+                context.pushReplacement(kNevCalender);
               },
               text: 'ปฎิทิน',
               icon: IconPhat.calendarToday,
@@ -135,8 +140,6 @@ class MainScreen extends GetView<RecordWorkViewModel> {
             CustomIconButtonMain(
               onTap: () {
                 context.push(kNevAddNote);
-
-                //   context.go('/addNote');
               },
               text: 'แจ้งลา',
               icon: IconPhat.frame_32,
@@ -144,17 +147,13 @@ class MainScreen extends GetView<RecordWorkViewModel> {
             CustomIconButtonMain(
               onTap: () {
                 context.push(kNevHistory);
-
-                // context.go('/history');
               },
               text: 'ประวัติ',
               icon: IconPhat.frame_32_2,
             ),
             CustomIconButtonMain(
               onTap: () {
-                context.push(kNevReportProBlem);
-
-                //  context.go('/reportProBlem');
+                context.pushReplacement(kNevReportProBlem);
               },
               text: 'แจ้งปัญหา',
               icon: (IconPhat.nextWeek),

@@ -14,7 +14,7 @@ import '../../../calender/views/add_note_screen.dart';
 import '../../../calender/views/calender_screen.dart';
 import '../../../history/view/history_screen.dart';
 import '../../../main/views/main_screen.dart';
-import '../../../report_problem/views/report_problem.dart';
+import '../../../report_problem/views/report_problem_screen.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey =
     GlobalKey<NavigatorState>(debugLabel: 'root');
@@ -126,7 +126,7 @@ class AppRouterProvider extends GetxController {
               },
               parentNavigatorKey: _shellNavigatorKey,
               pageBuilder: (context, state) =>
-                  const NoTransitionPage(child: ReportProBlem()))
+                  const NoTransitionPage(child: ReportProblemScreen()))
         ],
       ),
     ],

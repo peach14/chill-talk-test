@@ -11,7 +11,7 @@ class AppBinding extends Bindings {
   void dependencies() {
     // Get.lazyPut<AppViewModel>(() => AppViewModel());
 
-    Get.put<AppViewModel>(AppViewModel());
+    Get.put<CalenderViewModel>(CalenderViewModel());
     Get.put<BaseApiService>(BaseApiService());
     Get.put<LoginBinding>(LoginBinding());
     Get.put(AppRouterProvider());

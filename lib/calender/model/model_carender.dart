@@ -10,12 +10,14 @@ class ModelCarender {
   String title;
   String date;
   String time;
+  String note;
 
   ModelCarender({
     required this.type,
     required this.title,
     required this.date,
     required this.time,
+    required this.note,
   });
 
   factory ModelCarender.fromJson(Map<String, dynamic> json) => ModelCarender(
@@ -23,6 +25,7 @@ class ModelCarender {
         title: json["title"],
         date: json["date"],
         time: json["time"],
+        note: json["note"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -30,5 +33,6 @@ class ModelCarender {
         "title": title,
         "date": date,
         "time": time,
+        "note": note,
       };
 }

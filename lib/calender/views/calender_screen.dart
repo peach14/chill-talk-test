@@ -5,12 +5,13 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../base/component/dialog_alert.dart';
+import '../../base/config/routing/route_path.dart';
 import '../../base/utils/constants/asset_phat.dart';
 import '../../main/view_model/bindings/app_binding.dart';
 import '../model/model_carender.dart';
 import '../view_model/calender_view_model.dart';
 
-class CalenderScreen extends GetView<AppViewModel> {
+class CalenderScreen extends GetView<CalenderViewModel> {
   const CalenderScreen({super.key});
 
   @override
@@ -19,40 +20,48 @@ class CalenderScreen extends GetView<AppViewModel> {
     final events = controller.sampleEvents;
     return Scaffold(
       appBar: AppBar(
-          leading: InkWell(
-              // radius: ,
-              borderRadius: BorderRadius.circular(50),
+        leading: InkWell(
+            // radius: ,
+            borderRadius: BorderRadius.circular(50),
 
-              // borderRadius: BorderRadius.all(Radius.zero),
-              onTap: () {
-                // context.pushReplacement(kNevMain);
-                context.pop();
+            // borderRadius: BorderRadius.all(Radius.zero),
+            onTap: () {
+              context.pushReplacement(kNevMain);
+            },
+            child: Image.asset(IconPhat.backButton)),
+        title: Obx(() => Text(controller.dateAppbar.value,
+            style: const TextStyle(fontSize: 20))),
+        elevation: 0,
+        bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(25.0),
+            child: Container(
+              //  color: Colors.orange,
+              padding: const EdgeInsets.symmetric(vertical: 5),
+              // height: 15,
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Text("อา.", style: TextStyle(color: Colors.white)),
+                  Text("จ.", style: TextStyle(color: Colors.white)),
+                  Text("อ.", style: TextStyle(color: Colors.white)),
+                  Text("พ.", style: TextStyle(color: Colors.white)),
+                  Text("พฤ.", style: TextStyle(color: Colors.white)),
+                  Text("ศ.", style: TextStyle(color: Colors.white)),
+                  Text("ส.", style: TextStyle(color: Colors.white)),
+                ],
+              ),
+            )),
+        actions: [
+          IconButton(
+              onPressed: () {
+                controller.loadDataCalender();
               },
-              child: Image.asset(IconPhat.backButton)),
-          title: const Text("มิถุนายยน 2565", style: TextStyle(fontSize: 20)),
-          elevation: 0,
-          bottom: PreferredSize(
-              preferredSize: const Size.fromHeight(25.0),
-              child: Container(
-                //  color: Colors.orange,
-                padding: const EdgeInsets.symmetric(vertical: 5),
-                // height: 15,
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Text("อา.", style: TextStyle(color: Colors.white)),
-                    Text("จ.", style: TextStyle(color: Colors.white)),
-                    Text("อ.", style: TextStyle(color: Colors.white)),
-                    Text("พ.", style: TextStyle(color: Colors.white)),
-                    Text("พฤ.", style: TextStyle(color: Colors.white)),
-                    Text("ศ.", style: TextStyle(color: Colors.white)),
-                    Text("ส.", style: TextStyle(color: Colors.white)),
-                  ],
-                ),
-              ))),
-      body: GetBuilder<AppViewModel>(
-        init: AppViewModel(),
-        builder: (AppViewModel controllerss) {
+              icon: const Icon(Icons.add))
+        ],
+      ),
+      body: GetBuilder<CalenderViewModel>(
+        init: CalenderViewModel(),
+        builder: (CalenderViewModel controllerss) {
           // controller.sampleEvents.value.forEach((element) {
           //   print(element.eventName);
           // });
@@ -64,8 +73,13 @@ class CalenderScreen extends GetView<AppViewModel> {
               return const SizedBox.shrink();
             },
             monthYearLabelBuilder: (datetime) {
-              final year = datetime!.year.toString();
-              final month = datetime.month.monthName;
+              datetime!.year.toString();
+              datetime.month.monthName;
+
+              Future.microtask(() {
+                controllerss.setDateAppBar(date: datetime);
+              });
+
               return const Padding(
                 padding: EdgeInsets.symmetric(vertical: 4),
                 child: Row(
@@ -86,17 +100,22 @@ class CalenderScreen extends GetView<AppViewModel> {
               try {
                 String type = eventsOnTheDate.first.eventName;
                 String title = eventsOnTheDate.last.eventName;
+                String? note = eventsOnTheDate.last.note;
 
-                String dataDate =
-                    DateFormat('EEEE d MMMM y', 'th').format(DateTime(
-                  eventsOnTheDate.first.eventDate.year + 543,
-                  eventsOnTheDate.first.eventDate.month,
-                  eventsOnTheDate.first.eventDate.day,
-                ));
+                final dateFormat = DateFormat('EEEE d MMMM y', 'th');
+                final formattedDate =
+                    dateFormat.format(eventsOnTheDate.first.eventDate);
+                final buddhistYear = DateTime.now().year + 543;
+                String dataDate = formattedDate.replaceFirst(
+                    DateTime.now().year.toString(), buddhistYear.toString());
 
                 context.push('/detail',
                     extra: ModelCarender(
-                        type: type, title: title, date: dataDate, time: ''));
+                        type: type,
+                        title: title,
+                        date: dataDate,
+                        time: '',
+                        note: note ?? ''));
               } catch (e) {
                 // print(object)
                 // String dataDate =
@@ -106,17 +125,21 @@ class CalenderScreen extends GetView<AppViewModel> {
                 //   eventsOnTheDate.first.eventDate.day,
                 // ));
                 // print(dataDate);
+                final dateFormat = DateFormat('EEEE d MMMM y', 'th');
+                final formattedDate = dateFormat.format(date);
+                final buddhistYear = date.year + 543;
+                String dataDate = formattedDate.replaceFirst(
+                    date.year.toString(), buddhistYear.toString());
 
                 dialogAlert(
                   context: context,
+                  colorButton: Colors.red,
                   content: const Text("ไม่มีนัดหมาย"),
-                  titleIcon: Text("Data"),
+                  titleIcon: Text(dataDate),
                   onTap: () {
-                    Navigator.pop(context);
-                    // Reset isDialogShown when dialog is dismissed
+                    context.pop();
                   },
                 );
-                print("555555555555555555555");
               }
             },
             onPageChanged: (firstDate, lastDate) {},
@@ -127,43 +150,7 @@ class CalenderScreen extends GetView<AppViewModel> {
       floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add),
           onPressed: () async {
-            // final DateTime? datetime = await showDatePicker(
-            //     confirmText: "ตกลง",
-            //     cancelText: 'ยกเลิก',
-            //     context: context,
-            //     helpText: 'วันที่เริ่มลา',
-            //     locale: const Locale('th'),
-            //     initialDate: selectDate,
-            //     builder: (context, child) {
-            //       return Theme(
-            //         data: ThemeData.light().copyWith(
-            //           colorScheme: const ColorScheme.light(
-            //             onBackground: Colors.blue,
-            //             primary: Colors.blue, // Header background color
-            //             onPrimary: Colors.white, // Header text color
-            //             onSurface: Colors.black, // Body text color
-            //           ),
-            //           textButtonTheme: TextButtonThemeData(
-            //             style: TextButton.styleFrom(
-            //               foregroundColor: Colors.black, // Button text color
-            //             ),
-            //           ),
-            //         ),
-            //         child: child!,
-            //       );
-            //     },
-            //     firstDate: DateTime(2000),
-            //     lastDate: DateTime(3000));
-            //
-            // if (datetime != null) {
-            //   setState(() {
-            //     selectDate = datetime;
-            //     //     EventsDate.instan.addEvenDate(date: selectDate);
-            //
-            //     // sampleEvents(head: "asdasd", startDate: selectDate);
-            //   });
-            // }
-            controller.setDispod();
+            controller.resetValue();
             context.push("/addNote");
           }),
     );

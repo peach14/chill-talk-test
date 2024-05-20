@@ -7,6 +7,7 @@ Future<dynamic> dialogAlert({
   Widget? titleIcon,
   String? textButton,
   double? buttonWidth,
+  Color? colorButton,
   Function()? onTap,
   bool? barrierDismissible,
 }) {
@@ -63,7 +64,7 @@ Future<dynamic> dialogAlert({
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 5),
             child: Material(
-              color: Colors.green,
+              color: colorButton ?? Colors.green,
               borderRadius: BorderRadius.circular(32),
               elevation: 4,
               child: InkWell(
