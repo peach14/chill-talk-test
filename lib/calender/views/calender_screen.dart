@@ -9,6 +9,7 @@ import '../../base/config/routing/route_path.dart';
 import '../../base/utils/constants/asset_phat.dart';
 import '../../main/view_model/bindings/app_binding.dart';
 import '../model/model_carender.dart';
+import '../service/data_calender.dart';
 import '../view_model/calender_view_model.dart';
 
 class CalenderScreen extends GetView<CalenderViewModel> {
@@ -54,7 +55,19 @@ class CalenderScreen extends GetView<CalenderViewModel> {
         actions: [
           IconButton(
               onPressed: () {
-                controller.loadDataCalender();
+                controller.update();
+                final aa = DaDtaCalender.instance.dataCalender;
+                print(
+                    "--------------------------------------------------------------------");
+
+                print(aa);
+                print(
+                    "--------------------------------------------------------------------");
+                final cc = controller.sampleEvents;
+                for (var element in cc) {
+                  print(element.eventName);
+                  print(element.eventDate);
+                }
               },
               icon: const Icon(Icons.add))
         ],

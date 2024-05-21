@@ -94,62 +94,54 @@ class CalenderViewModel extends GetxController {
 
   // view calender
   void loadDataCalender() {
+    sampleEvents.clear();
     final getDataJson = DaDtaCalender.instance.dataCalender;
-    String dataJson = getDataJson.toString();
-    print(dataJson);
     final dataCalender = calenderTestModelFromJson(getDataJson);
-
-    dataCalender.forEach((element) {
-      DateTime parsedDate =
-          DateFormat("yyyy-MM-dd").parse(element.date as String);
-
+// Convert each CalenderTestModel to a CalendarEvent
+    for (var element in dataCalender) {
+      DateTime parsedDate = DateFormat("yyyy-MM-dd").parse(element.date);
       if (element.type!.isNotEmpty && element.title!.isEmpty) {
         sampleEvents.add(CalendarEvent(
           note: textNote,
-          eventName: element.type ?? '',
+          eventName: element.type ?? 'NODATA ONE',
           eventDate: parsedDate,
-          // add(const Duration(days: -42)),
           eventBackgroundColor: Colors.blueAccent,
           eventTextStyle: eventTextStyle,
         ));
       } else if (element.type!.isEmpty && element.title!.isNotEmpty) {
         sampleEvents.add(CalendarEvent(
           note: textNote,
-          eventName: element.title ?? '',
+          eventName: element.title ?? 'NODATA TWO',
           eventDate: parsedDate,
-          // add(const Duration(days: -42)),
           eventBackgroundColor: Colors.amberAccent,
           eventTextStyle: eventTextStyle,
         ));
       } else if (element.type!.isNotEmpty && element.title!.isNotEmpty) {
         sampleEvents.add(CalendarEvent(
           note: textNote,
-          eventName: element.type ?? '',
+          eventName: element.type ?? 'NOData',
           eventDate: parsedDate,
-          // add(const Duration(days: -42)),
           eventBackgroundColor: Colors.blueAccent,
           eventTextStyle: eventTextStyle,
         ));
         sampleEvents.add(CalendarEvent(
           note: textNote,
-          eventName: element.title ?? '',
+          eventName: element.title ?? 'no DATA',
           eventDate: parsedDate,
-          // add(const Duration(days: -42)),
           eventBackgroundColor: Colors.amberAccent,
           eventTextStyle: eventTextStyle,
         ));
       } else {
-        return;
+        break;
       }
-    });
+    }
 
-    // asd[0]['']
-    CalendarEvent(
-      eventName: "Writing test",
-      eventDate: _today.add(const Duration(days: -7)),
-      eventBackgroundColor: Colors.deepOrange,
-      eventTextStyle: eventTextStyle,
-    );
+    // Debug print to verify the contents of sampleEvents
+    for (var event in sampleEvents) {
+      print('Event Name: ${event.eventName}');
+      print('Event Date: ${event.eventDate}');
+      print('Note: ${event.note}');
+    }
     update();
   }
 
@@ -157,14 +149,7 @@ class CalenderViewModel extends GetxController {
   static const eventTextStyle =
       TextStyle(fontSize: 9, color: Colors.white, fontWeight: FontWeight.w400);
 
-  List<CalendarEvent> sampleEvents = [
-    CalendarEvent(
-      eventName: "Writing test",
-      eventDate: _today.add(const Duration(days: -7)),
-      eventBackgroundColor: Colors.deepOrange,
-      eventTextStyle: eventTextStyle,
-    ),
-  ];
+  List<CalendarEvent> sampleEvents = [];
 
   void checkValueDate() {
     sampleEvents.forEach((element) {
@@ -172,80 +157,61 @@ class CalenderViewModel extends GetxController {
     });
   }
 
-  void setDateTest() {
-    for (DateTime date = testStartDate;
-        date.isBefore(testEndDate.add(const Duration(days: 1)));
-        date = date.add(const Duration(days: 1))) {
-      if (typeText.isNotEmpty && titleText.isEmpty) {
-        final postData = calenderTestModelToJson(CalenderTestModel(
-            type: typeText, title: '', date: date.toString(), note: textNote));
-        DaDtaCalender.instance.dataCalender.add(postData);
-      } else if (typeText.isEmpty && titleText.isNotEmpty) {
-        final postData = calenderTestModelToJson(CalenderTestModel(
-            type: '', title: titleText, date: date.toString(), note: textNote));
-        DaDtaCalender.instance.dataCalender.add(postData);
-      } else if (typeText.isNotEmpty && titleText.isNotEmpty) {
-        final postData = calenderTestModelToJson(CalenderTestModel(
-            type: typeText,
-            title: titleText,
-            date: date.toString(),
-            note: textNote));
-        DaDtaCalender.instance.dataCalender.add(postData);
-      } else {
-        return;
-      }
-    }
-
-    // // Print the sampleEvents to verify
-    // for (var event in sampleEvents) {
-    //   print('Event: ${event.eventName}, Date: ${event.eventDate}');
-    // }
-//    loadDataCalender();
-    update();
-  }
-
-// Add Date
-  void addEvenDate() {
-    if (typeText.isNotEmpty && titleText.isEmpty) {
-      sampleEvents.add(CalendarEvent(
-        note: textNote,
-        eventName: typeText,
-        eventDate: recordStDate,
-        // add(const Duration(days: -42)),
-        eventBackgroundColor: Colors.blueAccent,
-        eventTextStyle: eventTextStyle,
-      ));
-    } else if (typeText.isEmpty && titleText.isNotEmpty) {
-      sampleEvents.add(CalendarEvent(
-        note: textNote,
-        eventName: titleText,
-        eventDate: recordStDate,
-        // add(const Duration(days: -42)),
-        eventBackgroundColor: Colors.amberAccent,
-        eventTextStyle: eventTextStyle,
-      ));
-    } else if (typeText.isNotEmpty && titleText.isNotEmpty) {
-      sampleEvents.add(CalendarEvent(
-        note: textNote,
-        eventName: typeText,
-        eventDate: recordStDate,
-        // add(const Duration(days: -42)),
-        eventBackgroundColor: Colors.blueAccent,
-        eventTextStyle: eventTextStyle,
-      ));
-      sampleEvents.add(CalendarEvent(
-        note: textNote,
-        eventName: titleText,
-        eventDate: recordStDate,
-        // add(const Duration(days: -42)),
-        eventBackgroundColor: Colors.amberAccent,
-        eventTextStyle: eventTextStyle,
-      ));
+  void checkEvenCalender() {
+    if (typeText.isNotEmpty && titleText.isNotEmpty) {
+      print("55555555555555555");
+      addEvenTypeTextAndTitleText();
+    } else if (titleText.isNotEmpty) {
+      print("1111111111111111111");
+      addEvenTitleText();
+    } else if (typeText.isNotEmpty) {
+      print("333333333333333");
+      addEvenTypeText();
     } else {
       return;
     }
-
+    loadDataCalender();
     update();
+  }
+
+  void addEvenTypeText() {
+    for (DateTime date = testStartDate;
+        date.isBefore(testEndDate.add(const Duration(days: 1)));
+        date = date.add(const Duration(days: 1))) {
+      final postData = calenderTestModelToJson(CalenderTestModel(
+          type: typeText, title: '', date: date.toString(), note: textNote));
+      DaDtaCalender.instance.dataCalender.add(postData);
+      // sampleEvents.add(CalendarEvent(
+      //     note: textNote,
+      //     eventName: typeText ?? 'NODATA ONE',
+      //     eventDate: date,
+      //     eventBackgroundColor: Colors.blueAccent,
+      //     eventTextStyle: eventTextStyle));
+    }
+    update();
+  }
+
+  void addEvenTitleText() {
+    for (DateTime date = testStartDate;
+        date.isBefore(testEndDate.add(const Duration(days: 1)));
+        date = date.add(const Duration(days: 1))) {
+      final postData = calenderTestModelToJson(CalenderTestModel(
+          type: '', title: titleText, date: date.toString(), note: textNote));
+      DaDtaCalender.instance.dataCalender.add(postData);
+    }
+  }
+
+  void addEvenTypeTextAndTitleText() {
+    for (DateTime date = testStartDate;
+        date.isBefore(testEndDate.add(const Duration(days: 1)));
+        date = date.add(const Duration(days: 1))) {
+      final postData = calenderTestModelToJson(CalenderTestModel(
+          type: typeText,
+          title: titleText,
+          date: date.toString(),
+          note: textNote));
+      DaDtaCalender.instance.dataCalender.add(postData);
+    }
   }
 
   // reset _ value
@@ -260,5 +226,7 @@ class CalenderViewModel extends GetxController {
         DateTime.now().year.toString(), buddhistYear.toString());
     startDateFormat.value = dataDate;
     endDateFormat.value = dataDate;
+    print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>$typeText");
+    print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>$titleText");
   }
 }

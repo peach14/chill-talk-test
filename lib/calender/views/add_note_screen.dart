@@ -40,7 +40,7 @@ class AddNoteScreen extends GetView<CalenderViewModel> {
                 onTap: () {
                   //  controller.addEvenDate();
                   //  controller.loadDataCalender();
-                  controller.setDateTest();
+                  controller.checkEvenCalender();
                   context.pop();
                 },
                 child: Container(
