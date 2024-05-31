@@ -1,15 +1,14 @@
+import 'dart:developer';
+
 import 'package:cell_calendar/cell_calendar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../service/data_calender.dart';
 
 class CalenderViewModel extends GetxController {
-  static final _today = DateTime.now();
-  DateTime testEndDate = DateTime.now();
-  DateTime testStartDate = DateTime.now();
-
   @override
   void onInit() {
     loadDataCalender();
@@ -21,12 +20,27 @@ class CalenderViewModel extends GetxController {
         DateTime.now().year.toString(), buddhistYear.toString());
     startDateFormat.value = dataDate;
     endDateFormat.value = dataDate;
+
+    final startTime = TimeOfDay.now();
+    int hour = startTime.hour;
+    if (startTime.period == DayPeriod.pm && startTime.hour != 12) {
+      hour + 12;
+    } else if (startTime.period == DayPeriod.am && startTime.hour == 12) {
+      hour = 0;
+    }
+    int minute = startTime.minute;
+    String formattedTime =
+        '${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
+    editStartTime = formattedTime;
+    editEndTime = formattedTime;
+    showStartTime.value = formattedTime;
+    showEndTime.value = formattedTime;
     super.onInit();
   }
 
   @override
   void onClose() {
-    recordStDate = DateTime.now();
+    //  recordStDate = DateTime.now();
     typeText = '';
     titleText = '';
     super.onClose();
@@ -45,8 +59,11 @@ class CalenderViewModel extends GetxController {
 
   // set Start Date
   final startDate = DateTime.now().obs;
+  DateTime startDates = DateTime.now();
   final startDateFormat = ''.obs;
-  DateTime recordStDate = DateTime.now();
+  final validDate = 0.obs;
+
+//  DateTime recordStDate = DateTime.now();
   void setStartDate({required DateTime date}) {
     final dateFormat = DateFormat('EEEE d MMMM y', 'th');
     final formattedDate = dateFormat.format(date);
@@ -54,36 +71,100 @@ class CalenderViewModel extends GetxController {
     String dataDate = formattedDate.replaceFirst(
         date.year.toString(), buddhistYear.toString());
     startDateFormat.value = dataDate;
-    recordStDate = date;
-    testStartDate = date;
-    print("date>>>>>>>>>>>>>>>>>>>>>>>>>$date");
-    print("date>>>>>>>>>>>>>>>>>>>>>>>>>$dataDate");
+    // recordStDate = date;
+    startDates = date;
+    validDate.value = 2;
   }
 
   // set end Date
   final endDate = DateTime.now().obs;
+  DateTime endDates = DateTime.now();
   final endDateFormat = ''.obs;
   void setEndDate({required DateTime date}) {
-    print(date);
     final dateFormat = DateFormat('EEEE d MMMM y', 'th');
     final formattedDate = dateFormat.format(date);
     final buddhistYear = date.year + 543;
     String dataDate = formattedDate.replaceFirst(
         date.year.toString(), buddhistYear.toString());
     endDateFormat.value = dataDate;
-    testEndDate = date;
+    endDates = date;
+  }
+
+  // set checkBox Date
+  final checkBox = false.obs;
+  void setCheckBox() {
+    checkBox.value = !checkBox.value;
+    if (checkBox.value) {
+      final dateFormat = DateFormat('EEEE d MMMM y', 'th');
+      final formattedDate = dateFormat.format(DateTime.now());
+      final buddhistYear = DateTime.now().year + 543;
+      String dataDate = formattedDate.replaceFirst(
+          DateTime.now().year.toString(), buddhistYear.toString());
+      startDateFormat.value = dataDate;
+      startDates = DateTime.now();
+      endDateFormat.value = dataDate;
+      // endDates = DateTime.now();
+      validDate.value = 2;
+      // editStartTime.value = '';
+      // editEndTime.value = '';
+    } else {
+      validDate.value = 0;
+    }
+  }
+
+  final showStartTime = ''.obs;
+  String editStartTime = '';
+  final selectStartTime = TimeOfDay.now().obs;
+  void setStartTime({required TimeOfDay time}) {
+    // Convert to 24-hour format
+    int hour = time.hour;
+    if (time.period == DayPeriod.pm && time.hour != 12) {
+      hour + 12;
+    } else if (time.period == DayPeriod.am && time.hour == 12) {
+      hour = 0;
+    }
+    int minute = time.minute;
+    String formattedTime =
+        '${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
+    editStartTime = formattedTime;
+    showStartTime.value = formattedTime;
+    print(editStartTime);
+  }
+
+  String editEndTime = '';
+  final showEndTime = ''.obs;
+  final selectEndTime = TimeOfDay.now().obs;
+  String validEndTime = '';
+  void setEndTime({required TimeOfDay date}) {
+    String formattedTime =
+        '${date.hour}:${date.minute.toString().padLeft(2, '0')}';
+    editEndTime = formattedTime;
+    showEndTime.value = formattedTime;
   }
 
   //set Type Text
   String typeText = '';
   void setTypeText({required String date}) {
     typeText = date;
+    if (typeText.isNotEmpty) {
+      validTypeTitle.value = true;
+    } else {
+      validTypeTitle.value = false;
+    }
   }
 
   //set title Text
   String titleText = '';
   void setTitleText({required String date}) {
     titleText = date;
+    if (titleText.isNotEmpty) {
+      validTypeTitle.value = true;
+    } else {
+      if (typeText.isNotEmpty) {
+      } else {
+        validTypeTitle.value = false;
+      }
+    }
   }
 
   //set Text note
@@ -100,9 +181,13 @@ class CalenderViewModel extends GetxController {
 // Convert each CalenderTestModel to a CalendarEvent
     for (var element in dataCalender) {
       DateTime parsedDate = DateFormat("yyyy-MM-dd").parse(element.date);
+
       if (element.type!.isNotEmpty && element.title!.isEmpty) {
         sampleEvents.add(CalendarEvent(
-          note: textNote,
+          note: element.note,
+          firstTime: element.firstTime,
+          lastTime: element.lastTime,
+          lastDate: element.lastDate,
           eventName: element.type ?? 'NODATA ONE',
           eventDate: parsedDate,
           eventBackgroundColor: Colors.blueAccent,
@@ -110,7 +195,10 @@ class CalenderViewModel extends GetxController {
         ));
       } else if (element.type!.isEmpty && element.title!.isNotEmpty) {
         sampleEvents.add(CalendarEvent(
-          note: textNote,
+          note: element.note,
+          firstTime: element.firstTime,
+          lastTime: element.lastTime,
+          lastDate: element.lastDate,
           eventName: element.title ?? 'NODATA TWO',
           eventDate: parsedDate,
           eventBackgroundColor: Colors.amberAccent,
@@ -118,14 +206,20 @@ class CalenderViewModel extends GetxController {
         ));
       } else if (element.type!.isNotEmpty && element.title!.isNotEmpty) {
         sampleEvents.add(CalendarEvent(
-          note: textNote,
+          note: element.note,
+          firstTime: element.firstTime,
+          lastTime: element.lastTime,
+          lastDate: element.lastDate,
           eventName: element.type ?? 'NOData',
           eventDate: parsedDate,
           eventBackgroundColor: Colors.blueAccent,
           eventTextStyle: eventTextStyle,
         ));
         sampleEvents.add(CalendarEvent(
-          note: textNote,
+          note: element.note,
+          firstTime: element.firstTime,
+          lastTime: element.lastTime,
+          lastDate: element.lastDate,
           eventName: element.title ?? 'no DATA',
           eventDate: parsedDate,
           eventBackgroundColor: Colors.amberAccent,
@@ -136,12 +230,6 @@ class CalenderViewModel extends GetxController {
       }
     }
 
-    // Debug print to verify the contents of sampleEvents
-    for (var event in sampleEvents) {
-      print('Event Name: ${event.eventName}');
-      print('Event Date: ${event.eventDate}');
-      print('Note: ${event.note}');
-    }
     update();
   }
 
@@ -151,72 +239,102 @@ class CalenderViewModel extends GetxController {
 
   List<CalendarEvent> sampleEvents = [];
 
-  void checkValueDate() {
-    sampleEvents.forEach((element) {
-      print(element.eventDate);
-    });
-  }
-
-  void checkEvenCalender() {
-    if (typeText.isNotEmpty && titleText.isNotEmpty) {
-      print("55555555555555555");
-      addEvenTypeTextAndTitleText();
-    } else if (titleText.isNotEmpty) {
-      print("1111111111111111111");
-      addEvenTitleText();
-    } else if (typeText.isNotEmpty) {
-      print("333333333333333");
-      addEvenTypeText();
-    } else {
-      return;
+  final validTypeTitle = true.obs;
+  void checkEvenCalender({required BuildContext context}) {
+    if (checkBox.value == true) {
+      editEndTime = '';
+      editStartTime = '';
+      // endDates = DateTime.now().add(Duration(days: -1));
     }
+    if (typeText.isEmpty && titleText.isEmpty) {
+      validTypeTitle.value = false;
+      print("6666666666666><><><<<<<<<<<<<<<<<<<>>>>>>");
+      if (validDate.value == 0) {
+        validDate.value = 1;
+        print("9999999999999><><><<<<<<<<<<<<<<<<<>>>>>>");
+      }
+    } else if (validDate.value == 0) {
+      print("7777777777777><><><<<<<<<<<<<<<<<<<>>>>>>");
+      validDate.value = 1;
+    } else if (typeText.isNotEmpty && titleText.isNotEmpty) {
+      validTypeTitle.value = true;
+
+      log("55555555555555555");
+      addEvenTypeTextAndTitleText();
+      context.pop();
+    } else if (titleText.isNotEmpty) {
+      validTypeTitle.value = true;
+
+      log("1111111111111111111");
+      addEvenTitleText();
+      context.pop();
+    } else if (typeText.isNotEmpty) {
+      validTypeTitle.value = true;
+
+      log("333333333333333");
+      addEvenTypeText();
+      context.pop();
+    } else {}
+
     loadDataCalender();
     update();
   }
 
   void addEvenTypeText() {
-    for (DateTime date = testStartDate;
-        date.isBefore(testEndDate.add(const Duration(days: 1)));
+    print("kkkkkkkkkkkkkkkkkkkkkk");
+    print(">>>>>>>>>>>>>>>>>>>${startDates}");
+    print(">>>>>>>>>>>>>>>>>>>${endDates}");
+    for (DateTime date = startDates;
+        date.isBefore(endDates.add(const Duration(days: 1)));
         date = date.add(const Duration(days: 1))) {
+      print("010110101100110101011101010");
       final postData = calenderTestModelToJson(CalenderTestModel(
-          type: typeText, title: '', date: date.toString(), note: textNote));
+          type: typeText,
+          title: '',
+          date: date.toString(),
+          note: textNote,
+          firstTime: editStartTime,
+          lastTime: editEndTime,
+          lastDate: endDates.toString()));
       DaDtaCalender.instance.dataCalender.add(postData);
-      // sampleEvents.add(CalendarEvent(
-      //     note: textNote,
-      //     eventName: typeText ?? 'NODATA ONE',
-      //     eventDate: date,
-      //     eventBackgroundColor: Colors.blueAccent,
-      //     eventTextStyle: eventTextStyle));
     }
-    update();
   }
 
   void addEvenTitleText() {
-    for (DateTime date = testStartDate;
-        date.isBefore(testEndDate.add(const Duration(days: 1)));
+    for (DateTime date = startDates;
+        date.isBefore(endDates.add(const Duration(days: 1)));
         date = date.add(const Duration(days: 1))) {
       final postData = calenderTestModelToJson(CalenderTestModel(
-          type: '', title: titleText, date: date.toString(), note: textNote));
+          type: '',
+          firstTime: editStartTime,
+          lastTime: editEndTime,
+          title: titleText,
+          date: date.toString(),
+          note: textNote,
+          lastDate: endDates.toString()));
       DaDtaCalender.instance.dataCalender.add(postData);
     }
   }
 
   void addEvenTypeTextAndTitleText() {
-    for (DateTime date = testStartDate;
-        date.isBefore(testEndDate.add(const Duration(days: 1)));
+    for (DateTime date = startDates;
+        date.isBefore(endDates.add(const Duration(days: 1)));
         date = date.add(const Duration(days: 1))) {
       final postData = calenderTestModelToJson(CalenderTestModel(
           type: typeText,
+          firstTime: editStartTime,
+          lastTime: editEndTime,
           title: titleText,
           date: date.toString(),
-          note: textNote));
+          note: textNote,
+          lastDate: endDates.toString()));
       DaDtaCalender.instance.dataCalender.add(postData);
     }
   }
 
   // reset _ value
   void resetValue() {
-    recordStDate = DateTime.now();
+    //  recordStDate = DateTime.now();
     typeText = '';
     titleText = '';
     final dateFormat = DateFormat('EEEE d MMMM y', 'th');
@@ -226,7 +344,25 @@ class CalenderViewModel extends GetxController {
         DateTime.now().year.toString(), buddhistYear.toString());
     startDateFormat.value = dataDate;
     endDateFormat.value = dataDate;
-    print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>$typeText");
-    print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>$titleText");
+    startDates = DateTime.now();
+    endDates = DateTime.now();
+
+    final startTime = TimeOfDay.now();
+    int hour = startTime.hour;
+    if (startTime.period == DayPeriod.pm && startTime.hour != 12) {
+      hour + 12;
+    } else if (startTime.period == DayPeriod.am && startTime.hour == 12) {
+      hour = 0;
+    }
+    int minute = startTime.minute;
+    String formattedTime =
+        '${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
+    editStartTime = formattedTime;
+    editEndTime = formattedTime;
+    showStartTime.value = formattedTime;
+    showEndTime.value = formattedTime;
+    validTypeTitle.value = true;
+    validDate.value = 0;
+    checkBox.value = false;
   }
 }

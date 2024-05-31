@@ -16,7 +16,6 @@ class LoginService {
     required RequestModel requestModel,
     required BuildContext context,
   }) async {
-    // Show the loading dialog immediately
     showDialog(
       barrierColor: Colors.transparent,
       barrierDismissible: false,
@@ -54,6 +53,8 @@ class LoginService {
       body: requestModelToJson(data: requestModel),
       context: context,
     );
+
+    // ignore: use_build_context_synchronously
     context.pop();
 
     // If the request completes before the timeout, close the loading dialog
@@ -65,6 +66,19 @@ class LoginService {
     // }
     return res.toString();
     // If the request took longer than the timeout, return null as the error dialog is already shown
-    return "null";
+  }
+
+  Future<String> refreshRepoLogin({
+    required RequestModel requestModel,
+    required BuildContext context,
+  }) async {
+    // Perform the request
+    final res = await Get.find<BaseApiService>().postRequest(
+      url: ApiEndPoints.instan.checkAuThen,
+      body: requestModelToJson(data: requestModel),
+      context: context,
+    );
+
+    return res.toString();
   }
 }

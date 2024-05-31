@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
@@ -11,16 +14,17 @@ import '../model/response_login_model.dart';
 import '../service/login_service.dart';
 
 class LoginViewModel extends GetxController {
+  final showPassword = false.obs;
+
   final textEmail = ''.obs;
   final textPassword = ''.obs;
   final validEmail = false.obs;
   final validPass = false.obs;
   ResponseModelLogin? response;
   final resError = ErrorModelLogin(status: 9, message: '').obs;
-  @override
-  void onInit() {
-    // TODO: implement onInit
-    super.onInit();
+
+  void setEnablePassword() {
+    showPassword.value = !showPassword.value;
   }
 
   void setEmail({required String email}) {
@@ -53,12 +57,16 @@ class LoginViewModel extends GetxController {
     }
   }
 
-  void login({required BuildContext context}) async {
+  void login(
+      {required BuildContext context,
+      String? username,
+      String? password}) async {
+    //var passConvert = int.parse(textPassword.value);
+
     final res = await LoginService.instance.repoLogin(
         requestModel:
             RequestModel(username: 'test@nnmail.com', password: 123456),
         context: context);
-
     if (errorModelLoginFromJson(res).status == kNoSuccessToken) {
       resError.value = errorModelLoginFromJson(res);
     }
@@ -69,9 +77,12 @@ class LoginViewModel extends GetxController {
       final token =
           responseModelLoginFromJson(getResponse ?? 'NoData_Get_response');
       SecureStorage.instance.saveToken(token.status.toString());
+      String encoded = base64.encode(utf8.encode("123456"));
+      SecureStorage.instance.savePass(encoded);
+      // ignore: use_build_context_synchronously
       context.go(kNevMain);
     }
-
-    print("ใน LoginService >>>>>>>>>>>>>>>>>>>${res}");
+    // ignore: use_build_context_synchronously
+    log("ใน LoginService >>>>>>>>>>>>>>>>>>>$res");
   }
 }

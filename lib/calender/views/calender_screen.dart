@@ -2,15 +2,13 @@ import 'package:cell_calendar/cell_calendar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 
-import '../../base/component/dialog_alert.dart';
 import '../../base/config/routing/route_path.dart';
 import '../../base/utils/constants/asset_phat.dart';
 import '../../main/view_model/bindings/app_binding.dart';
-import '../model/model_carender.dart';
 import '../service/data_calender.dart';
 import '../view_model/calender_view_model.dart';
+import '../view_model/detail_view_model.dart';
 
 class CalenderScreen extends GetView<CalenderViewModel> {
   const CalenderScreen({super.key});
@@ -21,6 +19,15 @@ class CalenderScreen extends GetView<CalenderViewModel> {
     final events = controller.sampleEvents;
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          IconButton(
+              onPressed: () {
+                DaDtaCalender.instance.dataCalender.forEach((element) {
+                  print(element);
+                });
+              },
+              icon: Icon(Icons.check))
+        ],
         leading: InkWell(
             // radius: ,
             borderRadius: BorderRadius.circular(50),
@@ -52,33 +59,10 @@ class CalenderScreen extends GetView<CalenderViewModel> {
                 ],
               ),
             )),
-        actions: [
-          IconButton(
-              onPressed: () {
-                controller.update();
-                final aa = DaDtaCalender.instance.dataCalender;
-                print(
-                    "--------------------------------------------------------------------");
-
-                print(aa);
-                print(
-                    "--------------------------------------------------------------------");
-                final cc = controller.sampleEvents;
-                for (var element in cc) {
-                  print(element.eventName);
-                  print(element.eventDate);
-                }
-              },
-              icon: const Icon(Icons.add))
-        ],
       ),
       body: GetBuilder<CalenderViewModel>(
         init: CalenderViewModel(),
         builder: (CalenderViewModel controllerss) {
-          // controller.sampleEvents.value.forEach((element) {
-          //   print(element.eventName);
-          // });
-          //   final clr = Get.find<AppViewModel>();
           return CellCalendar(
             cellCalendarPageController: controllerss.cellCalendarPageController,
             events: controllerss.sampleEvents,
@@ -109,57 +93,16 @@ class CalenderScreen extends GetView<CalenderViewModel> {
                     eventDate.month == date.month &&
                     eventDate.day == date.day;
               }).toList();
-
-              try {
-                String type = eventsOnTheDate.first.eventName;
-                String title = eventsOnTheDate.last.eventName;
-                String? note = eventsOnTheDate.last.note;
-
-                final dateFormat = DateFormat('EEEE d MMMM y', 'th');
-                final formattedDate =
-                    dateFormat.format(eventsOnTheDate.first.eventDate);
-                final buddhistYear = DateTime.now().year + 543;
-                String dataDate = formattedDate.replaceFirst(
-                    DateTime.now().year.toString(), buddhistYear.toString());
-
-                context.push('/detail',
-                    extra: ModelCarender(
-                        type: type,
-                        title: title,
-                        date: dataDate,
-                        time: '',
-                        note: note ?? ''));
-              } catch (e) {
-                // print(object)
-                // String dataDate =
-                // DateFormat('EEEE d MMMM y', 'th').format(DateTime(
-                //   eventsOnTheDate.first.eventDate.year + 543,
-                //   eventsOnTheDate.first.eventDate.month,
-                //   eventsOnTheDate.first.eventDate.day,
-                // ));
-                // print(dataDate);
-                final dateFormat = DateFormat('EEEE d MMMM y', 'th');
-                final formattedDate = dateFormat.format(date);
-                final buddhistYear = date.year + 543;
-                String dataDate = formattedDate.replaceFirst(
-                    date.year.toString(), buddhistYear.toString());
-
-                dialogAlert(
-                  context: context,
-                  colorButton: Colors.red,
-                  content: const Text("ไม่มีนัดหมาย"),
-                  titleIcon: Text(dataDate),
-                  onTap: () {
-                    context.pop();
-                  },
-                );
-              }
+              final controllerDetail = Get.find<DetailViewModel>();
+              controllerDetail.getDataDetail(
+                  date: date,
+                  eventsOnTheDate: eventsOnTheDate,
+                  context: context);
             },
             onPageChanged: (firstDate, lastDate) {},
           );
         },
       ),
-      //floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add),
           onPressed: () async {

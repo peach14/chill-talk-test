@@ -34,10 +34,9 @@ class RecordService {
       body: respModelRecordWorkToJson(data: requestModel),
       context: context,
     );
+    // ignore: use_build_context_synchronously
     context.pop();
-    print(">>>>>>>>>>>>>>>>>>>>res>>$res");
 
     return res.toString();
-    ;
   }
 }

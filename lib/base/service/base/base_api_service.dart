@@ -30,7 +30,6 @@ class BaseApiService extends GetConnect {
 
     if (connectivityResult != ConnectivityResult.none) {
       try {
-        //await Future.delayed(const Duration(seconds: 10));
         final deCode = json.decode(body) as Map;
         return await _dio.post(
           url,
@@ -45,6 +44,7 @@ class BaseApiService extends GetConnect {
         log("BESE_API>>>> ERROE>>>>>>>>>>>>$e");
       }
     } else {
+      // ignore: use_build_context_synchronously
       dialogAlert(
         context: context,
         content: const Text("ไม่พบ สัญญาณอินเตอร์เน็ต"),

@@ -1,5 +1,6 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+// ignore: depend_on_referenced_packages
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class CustomDropDown extends ConsumerStatefulWidget {
@@ -53,7 +54,6 @@ class _CustomDropDownState extends ConsumerState<CustomDropDown> {
         customButton: widget.botTon,
         items: widget.item.asMap().entries.map((MapEntry<int, String> entry) {
           String item = entry.value;
-          int index = entry.key;
           // String splitItem = item.split('/').last.split('.').first;
           return DropdownMenuItem<String>(
             onTap: () {

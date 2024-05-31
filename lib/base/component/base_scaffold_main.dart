@@ -18,11 +18,11 @@ class BaseScaffoldMain extends StatelessWidget {
           children: [
             Expanded(
                 child: Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                   gradient: LinearGradient(
                 colors: [Color(0xff1568ac), Color(0xffffffff)],
-                begin: const Alignment(0.00, -0.4),
-                end: const Alignment(0, 2),
+                begin: Alignment(0.00, -0.4),
+                end: Alignment(0, 2),
               )
 
                   // LinearGradient(

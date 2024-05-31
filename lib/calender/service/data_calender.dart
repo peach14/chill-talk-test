@@ -6,19 +6,47 @@ class DaDtaCalender {
       "type": "AAAAAAAAAA",
       "title": "AAAAAAAAAA",
       "date": "2024-05-27",
-      "note": "adsffffsggfsffweew"
+      "note": "adsffffsggfsffweew",
+      "lastDate": "",
+      "firstTime": "08.30",
+      "lastTime": "14.00",
     },
     {
       "type": "BBBBBBBBBB",
       "title": "BBBBBBBBB",
       "date": "2024-05-1",
-      "note": "adsffffsggfsffweew"
+      "note": "adsffffsggfsffweew",
+      "lastDate": "2024-05-3",
+      "firstTime": "08.30",
+      "lastTime": "14.00",
+    },
+    {
+      "type": "BBBBBBBBBB",
+      "title": "BBBBBBBBB",
+      "date": "2024-05-2",
+      "note": "adsffffsggfsffweew",
+      "lastDate": "2024-05-3",
+      "firstTime": "08.30",
+      "lastTime": "14.00",
+    },
+    {
+      "type": "BBBBBBBBBB",
+      "title": "BBBBBBBBB",
+      "date": "2024-05-3",
+      "note": "adsffffsggfsffweew",
+      "lastDate": "2024-05-3",
+      "firstTime": "09.00",
+      "lastTime": "16.00",
     },
     {
       "type": "CCCCCCCCCCCCCCC",
-      "title": "CCCCCCCCCCCCCCC",
+      "title": "GGGGGGGGGGGGGGGGGGGG",
       "date": "2024-05-15",
-      "note": "adsffffsggfsffweew"
+      "note":
+          "adsffffsggfsffweewadsffffsggfsffweewadsffffsggfsffweewadsffffsggfsffweewadsffffsggfsffweewadsffffsggfsffweew",
+      "lastDate": "",
+      "firstTime": "",
+      "lastTime": "",
     },
   ];
 }
@@ -38,12 +66,18 @@ class CalenderTestModel {
   String? title;
   String date;
   String note;
+  String? lastDate;
+  String? firstTime;
+  String? lastTime;
 
   CalenderTestModel({
     required this.type,
     required this.title,
     required this.date,
     required this.note,
+    required this.lastDate,
+    this.firstTime,
+    this.lastTime,
   });
 
   factory CalenderTestModel.fromJson(Map<String, dynamic> json) =>
@@ -52,6 +86,9 @@ class CalenderTestModel {
         title: json["title"],
         date: json["date"],
         note: json["note"],
+        lastDate: json["lastDate"],
+        firstTime: json["firstTime"],
+        lastTime: json["lastTime"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -59,5 +96,8 @@ class CalenderTestModel {
         "title": title,
         "date": date,
         "note": note,
+        "lastDate": lastDate,
+        "firstTime": firstTime,
+        "lastTime": lastTime
       };
 }

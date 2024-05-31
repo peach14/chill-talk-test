@@ -8,8 +8,8 @@ import '../../base/component/base_scaffold_main.dart';
 import '../../base/component/custom_bottom_home.dart';
 import '../../base/component/custom_button_main.dart';
 import '../../base/config/routing/route_path.dart';
-import '../../base/service/local_storage/secure_storage_service.dart';
 import '../../base/utils/constants/asset_phat.dart';
+import '../view_model/out_work_view_model.dart';
 
 class MainScreen extends GetView<RecordWorkViewModel> {
   const MainScreen({super.key});
@@ -17,6 +17,7 @@ class MainScreen extends GetView<RecordWorkViewModel> {
   @override
   Widget build(BuildContext context) {
     Get.put<DataClientViewModel>(DataClientViewModel());
+    Get.lazyPut<OutWorkViewModel>(() => OutWorkViewModel());
 
     return BaseScaffoldMain(
       bodyTop: SafeArea(
@@ -95,35 +96,32 @@ class MainScreen extends GetView<RecordWorkViewModel> {
           ],
         ),
       ),
-      bodyCenter: StreamBuilder(
-        stream: Stream.value(2),
-        builder: (context, snapshot) {
-          controller.loadLocation();
-          return Row(
-            children: [
-              const Spacer(),
-              CustomBottomHome(
-                icon: IconPhat.out1Icon,
-                text: 'บันทึก\nเข้างาน',
-                onTap: () {
-                  controller.getCurrentLocation(context: context);
-                },
-              ),
-              const Spacer(),
-              CustomBottomHome(
+      bodyCenter: Row(
+        children: [
+          const Spacer(),
+          CustomBottomHome(
+            icon: IconPhat.out1Icon,
+            text: 'บันทึก\nเข้างาน',
+            onTap: () {
+              controller.getCurrentLocation(context: context);
+            },
+          ),
+          const Spacer(),
+          GetBuilder(
+            builder: (OutWorkViewModel controller) {
+              return CustomBottomHome(
                 icon: IconPhat.out2Icon,
                 color: Colors.white,
                 textColor: const Color(0xff1a6cae),
                 text: 'บันทึก\nออกงาน',
                 onTap: () {
-                  SecureStorage.instance.deleteToken();
-                  context.go(kNevDefault);
+                  controller.logout(context: context);
                 },
-              ),
-              const Spacer(),
-            ],
-          );
-        },
+              );
+            },
+          ),
+          const Spacer(),
+        ],
       ),
       bodyBottom: Expanded(
         flex: 7,

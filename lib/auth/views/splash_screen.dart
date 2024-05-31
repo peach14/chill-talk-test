@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:get/get.dart';
 
 import '../../base/component/loading.dart';
-import '../../base/config/routing/route_path.dart';
-import '../../base/service/local_storage/secure_storage_service.dart';
-import '../../base/utils/constants/constants.dart';
+import '../view_model/splash_view_model.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -14,19 +12,12 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  final SplashViewModel _splashViewModel = Get.put(SplashViewModel());
+
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      final getToken = await SecureStorage.instance.getToken();
-      await Future.delayed(const Duration(seconds: 2));
-      int myInt = int.parse(getToken ?? '7');
-      if (mounted) {
-        if (myInt == keySuccessToken) {
-          context.go(kNevMain);
-        } else {
-          context.go(kNevLogin);
-        }
-      }
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      _splashViewModel.checkTokenAndNavigate(context: context);
     });
     super.initState();
   }

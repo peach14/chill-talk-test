@@ -4,7 +4,7 @@ enum ButtonType { outlined, filled, circle }
 
 class ButtonCustom extends StatelessWidget {
   const ButtonCustom(
-      {Key? key,
+      {super.key,
       this.color = Colors.deepOrange,
       required this.text,
       required this.onTap,
@@ -17,8 +17,7 @@ class ButtonCustom extends StatelessWidget {
       this.buttonType = ButtonType.filled, // new parameter for button type
       this.borderRadius = 90,
       this.borderColors,
-      this.keys})
-      : super(key: key);
+      this.keys});
 
   final Color? color;
   final String text;

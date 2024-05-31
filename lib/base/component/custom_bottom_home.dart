@@ -21,11 +21,11 @@ class CustomBottomHome extends StatelessWidget {
     return Material(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(radius ?? 12),
-        side: BorderSide(
+        side: const BorderSide(
             width: 1.2,
             color: Color(0xff1a6cae)), // Define the border properties here
       ),
-      color: color ?? Color(0xff1a6cae),
+      color: color ?? const Color(0xff1a6cae),
       elevation: 5,
       child: InkWell(
         onTap: onTap,

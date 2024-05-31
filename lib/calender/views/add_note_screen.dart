@@ -1,5 +1,3 @@
-import 'package:chill_talk_test/base/component/custom_time.dart';
-import 'package:chill_talk_test/calender/view_model/calender_view_model.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -7,26 +5,22 @@ import 'package:go_router/go_router.dart';
 
 import '../../../base/component/custom_dropdown.dart';
 import '../../../base/component/text_form_field_custom.dart';
+import '../../base/component/custom_dateTime_call.dart';
+import '../../base/component/custom_timeOfDay_call.dart';
 import '../../base/component/text_filed_form_details.dart';
 import '../../base/utils/constants/asset_phat.dart';
+import '../view_model/calender_view_model.dart';
 
 class AddNoteScreen extends GetView<CalenderViewModel> {
   const AddNoteScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    TimeOfDay selectTime = TimeOfDay.now();
-    bool checkBox = false;
     return Scaffold(
       appBar: AppBar(
         leading: InkWell(
-            // radius: ,
             borderRadius: BorderRadius.circular(50),
-
-            // borderRadius: BorderRadius.all(Radius.zero),
-            onTap: () {
-              Navigator.pop(context);
-            },
+            onTap: () => context.pop(),
             child: Image.asset(IconPhat.backButton)),
         title: const Text("เพิ่มโน๊ต", style: TextStyle(fontSize: 20)),
         actions: [
@@ -37,12 +31,7 @@ class AddNoteScreen extends GetView<CalenderViewModel> {
               borderRadius: BorderRadius.circular(8),
               child: InkWell(
                 borderRadius: BorderRadius.circular(8),
-                onTap: () {
-                  //  controller.addEvenDate();
-                  //  controller.loadDataCalender();
-                  controller.checkEvenCalender();
-                  context.pop();
-                },
+                onTap: () => controller.checkEvenCalender(context: context),
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: const Align(
@@ -87,12 +76,10 @@ class AddNoteScreen extends GetView<CalenderViewModel> {
                     children: [
                       Expanded(
                         child: CustomDropDown(
-                          onChanged: (value) {
-                            controller.setTypeText(date: value ?? '');
-                            print(value);
-                          },
+                          onChanged: (value) =>
+                              controller.setTypeText(date: value ?? ''),
                           isExpanded: true,
-                          item: const ["asdas", "asdasd", "asd"],
+                          item: const ["ลา", "Meeting", "ลากิจ"],
                           direction: DropdownDirection.textDirection,
                         ),
                       ),
@@ -102,13 +89,24 @@ class AddNoteScreen extends GetView<CalenderViewModel> {
                   TextFormFieldCustom(
                     onChanged: (value) {
                       controller.setTitleText(date: value ?? '');
-
-                      print(value);
                       return null;
                     },
                     broderColor: Colors.grey.shade400,
                     label: "หัวข้อ",
+                    formType: FormType.addNote,
                   ),
+                  Obx(
+                    () => controller.validTypeTitle.value == false
+                        ? const Padding(
+                            padding: EdgeInsets.only(top: 3),
+                            child: Text(
+                              "กรุณาเลือกประเภท หรือ ระบุหัวข้อ",
+                              style: TextStyle(color: Colors.red),
+                            ),
+                          )
+                        : const SizedBox(),
+                  ),
+                  const SizedBox(height: 32),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -127,30 +125,28 @@ class AddNoteScreen extends GetView<CalenderViewModel> {
                           const SizedBox(width: 8),
                           InkWell(
                             borderRadius: BorderRadius.circular(50),
-                            onTap: () {
-                              // setState(() {
-                              //   checkBox = !checkBox;
-                              // });
-                            },
+                            onTap: () => controller.setCheckBox(),
                             child: Container(
-                              decoration: BoxDecoration(
-                                  color: Colors.grey.shade300,
-                                  borderRadius: BorderRadius.circular(50)),
-                              child: checkBox
-                                  ? const Icon(
-                                      Icons.done,
-                                      color: Colors.blue,
-                                    )
-                                  : const Icon(
-                                      Icons.done,
-                                      color: Colors.transparent,
-                                    ),
-                            ),
+                                decoration: BoxDecoration(
+                                    color: Colors.grey.shade300,
+                                    borderRadius: BorderRadius.circular(50)),
+                                child: Obx(
+                                  () => controller.checkBox.value == true
+                                      ? const Icon(
+                                          Icons.done,
+                                          color: Colors.blue,
+                                        )
+                                      : const Icon(
+                                          Icons.done,
+                                          color: Colors.transparent,
+                                        ),
+                                )),
                           )
                         ],
                       ),
                     ],
                   ),
+                  const SizedBox(height: 5),
                   Material(
                     borderRadius: BorderRadius.circular(8),
                     elevation: 5,
@@ -163,222 +159,139 @@ class AddNoteScreen extends GetView<CalenderViewModel> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Material(
-                            borderRadius: BorderRadius.circular(20),
-                            child: InkWell(
+                          Obx(() => Material(
                                 borderRadius: BorderRadius.circular(20),
-                                onTap: () async {
-                                  //  DateTime selectDate = DateTime.now();
-
-                                  final DateTime? datetime =
-                                      await showDatePicker(
-                                          confirmText: "ตกลง",
-                                          cancelText: 'ยกเลิก',
-                                          context: context,
-                                          helpText: 'วันที่เริ่มลา',
-                                          locale: const Locale('th'),
-                                          initialDate:
-                                              controller.startDate.value,
-                                          builder: (context, child) {
-                                            return Theme(
-                                              data: ThemeData.light().copyWith(
-                                                colorScheme:
-                                                    const ColorScheme.light(
-                                                  onBackground: Colors.blue,
-                                                  primary: Colors
-                                                      .blue, // Header background color
-                                                  onPrimary: Colors
-                                                      .white, // Header text color
-                                                  onSurface: Colors
-                                                      .black, // Body text color
-                                                ),
-                                                textButtonTheme:
-                                                    TextButtonThemeData(
-                                                  style: TextButton.styleFrom(
-                                                    foregroundColor: Colors
-                                                        .black, // Button text color
-                                                  ),
-                                                ),
-                                              ),
-                                              child: child!,
-                                            );
+                                child: InkWell(
+                                    borderRadius: BorderRadius.circular(20),
+                                    onTap: controller.checkBox.value == true
+                                        ? null
+                                        : () async {
+                                            final DateTime? datetimeStart =
+                                                await CustomDateTimeCall
+                                                    .instance
+                                                    .dateTime(
+                                                        context: context,
+                                                        initialDate: controller
+                                                            .startDate.value,
+                                                        helpText:
+                                                            'วันที่เริ่มลา',
+                                                        onBackground:
+                                                            Colors.blue,
+                                                        primary: Colors.blue);
+                                            if (datetimeStart != null) {
+                                              controller.setStartDate(
+                                                  date: datetimeStart);
+                                              await Future.delayed(
+                                                  const Duration(seconds: 1));
+                                              final DateTime? datetimeEnd =
+                                                  // ignore: use_build_context_synchronously
+                                                  await CustomDateTimeCall
+                                                      .instance
+                                                      .dateTime(
+                                                          context: context,
+                                                          initialDate:
+                                                              controller.endDate
+                                                                  .value,
+                                                          helpText:
+                                                              'วันสุดท้าย',
+                                                          onBackground:
+                                                              Colors.red,
+                                                          primary: Colors.red);
+                                              if (datetimeEnd != null) {
+                                                controller.setEndDate(
+                                                    date: datetimeEnd);
+                                              }
+                                            }
                                           },
-                                          firstDate: DateTime(2000),
-                                          lastDate: DateTime(3000));
-                                  if (datetime != null) {
-                                    // setState(() {
-                                    //   selectDate = datetime;
-                                    // });
-
-                                    // formattedDate = formattedDate.replaceAll(
-                                    //     selectDate.year.toString(),
-                                    //     selectDate.toString());
-                                    controller.setStartDate(date: datetime);
-                                    // controllers.startDate.value =
-                                    //     datetime;
-
-                                    await Future.delayed(
-                                        const Duration(seconds: 1));
-
-                                    final DateTime? datetimeEnd =
-                                        await showDatePicker(
-                                      confirmText: "ตกลง",
-                                      cancelText: 'ยกเลิก',
-                                      context: context,
-                                      helpText: 'วันสุดท้าย',
-                                      initialDate: controller.endDate.value,
-                                      firstDate: DateTime(2000),
-                                      lastDate: DateTime(3000),
-                                      builder: (context, child) {
-                                        return Theme(
-                                          data: ThemeData.light().copyWith(
-                                            colorScheme:
-                                                const ColorScheme.light(
-                                              onBackground: Colors.red,
-                                              primary: Colors
-                                                  .red, // Header background color
-                                              onPrimary: Colors
-                                                  .white, // Header text color
-                                              onSurface: Colors
-                                                  .black, // Body text color
+                                    child: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 15),
+                                        child: Column(
+                                          children: [
+                                            Text(
+                                                "${controller.startDateFormat}"),
+                                            const SizedBox(
+                                              height: 20,
                                             ),
-                                            textButtonTheme:
-                                                TextButtonThemeData(
-                                              style: TextButton.styleFrom(
-                                                foregroundColor: Colors
-                                                    .black, // Button text color
+                                            Text("${controller.endDateFormat}")
+                                          ],
+                                        ))),
+                              )),
+                          Obx(() {
+                            return Material(
+                              borderRadius: BorderRadius.circular(20),
+                              child: InkWell(
+                                  borderRadius: BorderRadius.circular(20),
+                                  onTap: controller.checkBox.value == true
+                                      ? null
+                                      : () async {
+                                          final TimeOfDay? startTimeOfDay =
+                                              await CustomTimeOfDayCall.instance
+                                                  .timeOfDay(
+                                                      themeColor: Colors.blue,
+                                                      initialTime: controller
+                                                          .selectStartTime
+                                                          .value,
+                                                      helpText: 'เวลาเริ่ม',
+                                                      context: context);
+                                          if (startTimeOfDay != null) {
+                                            print(startTimeOfDay.toString());
+                                            controller.setStartTime(
+                                                time: startTimeOfDay);
+
+                                            await Future.delayed(
+                                                const Duration(seconds: 1));
+
+                                            final TimeOfDay? timeOfDayEnd =
+                                                // ignore: use_build_context_synchronously
+                                                await CustomTimeOfDayCall
+                                                    .instance
+                                                    .timeOfDay(
+                                                        themeColor: Colors.red,
+                                                        initialTime: controller
+                                                            .selectStartTime
+                                                            .value,
+                                                        helpText: 'เวลาสิ้นสุด',
+                                                        context: context);
+                                            if (timeOfDayEnd != null) {
+                                              controller.setEndTime(
+                                                  date: timeOfDayEnd);
+                                            }
+                                          }
+                                        },
+                                  child: controller.checkBox.value == true
+                                      ? const SizedBox.shrink()
+                                      : Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 30, vertical: 8),
+                                          child: Column(
+                                            children: [
+                                              Text(controller
+                                                  .showStartTime.value),
+                                              const SizedBox(
+                                                height: 20,
                                               ),
-                                            ),
-                                          ),
-                                          child: child!,
-                                        );
-                                      },
-                                    );
-                                    if (datetimeEnd != null) {
-                                      controller.setEndDate(date: datetimeEnd);
-                                    }
-                                  }
-                                },
-                                child: Obx(() {
-                                  return Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 15),
-                                      child: Column(
-                                        children: [
-                                          Text("${controller.startDateFormat}"),
-                                          const SizedBox(
-                                            height: 20,
-                                          ),
-                                          Text("${controller.endDateFormat}")
-                                        ],
-                                      ));
-                                })),
-                          ),
-                          Material(
-                            borderRadius: BorderRadius.circular(20),
-                            child: InkWell(
-                                borderRadius: BorderRadius.circular(20),
-                                onTap: () async {
-                                  final TimeOfDay? timeOfDay =
-                                      await customShowTimePicker(
-                                    hourLabelText: "ชั่วโมง",
-                                    minuteLabelText: "นาที",
-                                    context: context,
-                                    initialTime: selectTime,
-                                    barrierDismissible: false,
-                                    helpText: 'เวลาเริ่ม',
-                                    builder:
-                                        (BuildContext context, Widget? child) {
-                                      return Theme(
-                                        data: ThemeData.light().copyWith(
-                                          colorScheme: const ColorScheme.light(
-                                            primary: Colors
-                                                .blue, // Header background color
-                                            onPrimary: Colors
-                                                .white, // Header text color
-                                            onSurface:
-                                                Colors.black, // Body text color
-                                          ),
-                                          textButtonTheme: TextButtonThemeData(
-                                            style: TextButton.styleFrom(
-                                              foregroundColor: Colors
-                                                  .black, // Button text color
-                                            ),
-                                          ),
-                                        ),
-                                        child: child!,
-                                      );
-                                    },
-                                    initialEntryMode:
-                                        CustomTimePickerEntryMode.dial,
-                                  );
-                                  if (timeOfDay != null) {
-                                    // setState(() {
-                                    //   selectTime = timeOfDay;
-                                    //   String formattedTime =
-                                    //       '${selectTime.hour}:${selectTime.minute.toString().padLeft(2, '0')}';
-                                    //   print(
-                                    //       '>>>>>>>>>>>>>>>>>>>>>>Selected Time: $formattedTime');
-                                    // });
-
-                                    await Future.delayed(
-                                        const Duration(seconds: 1));
-
-                                    final TimeOfDay? timeOfDayEnd =
-                                        await customShowTimePicker(
-                                            context: context,
-                                            initialTime: selectTime,
-                                            helpText: 'เวลาสิ้นสุด',
-                                            builder: (BuildContext context,
-                                                Widget? child) {
-                                              return Theme(
-                                                data:
-                                                    ThemeData.light().copyWith(
-                                                  colorScheme:
-                                                      const ColorScheme.light(
-                                                    primary: Colors
-                                                        .red, // Header background color
-                                                    onPrimary: Colors
-                                                        .white, // Header text color
-                                                    onSurface: Colors
-                                                        .black, // Body text color
-                                                  ),
-                                                  textButtonTheme:
-                                                      TextButtonThemeData(
-                                                    style: TextButton.styleFrom(
-                                                      foregroundColor: Colors
-                                                          .black, // Button text color
-                                                    ),
-                                                  ),
-                                                ),
-                                                child: child!,
-                                              );
-                                            },
-                                            initialEntryMode:
-                                                CustomTimePickerEntryMode.dial);
-                                    if (timeOfDayEnd != null) {
-                                      //   setState(() {
-                                      //     selectTime = timeOfDayEnd;
-                                      //   });
-                                    }
-                                  }
-                                },
-                                child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 30, vertical: 8),
-                                    child: const Column(
-                                      children: [
-                                        Text("13.00"),
-                                        SizedBox(
-                                          height: 20,
-                                        ),
-                                        Text("13.00")
-                                      ],
-                                    ))),
-                          )
+                                              Text(controller.showEndTime.value)
+                                            ],
+                                          ))),
+                            );
+                          })
                         ],
                       ),
                     ),
+                  ),
+                  Obx(
+                    () {
+                      return controller.validDate.value == 1
+                          ? const Padding(
+                              padding: EdgeInsets.only(top: 5),
+                              child: Text(
+                                "กรุณาเลือกวันที่",
+                                style: TextStyle(color: Colors.red),
+                              ),
+                            )
+                          : const SizedBox();
+                    },
                   ),
                   const SizedBox(height: 20),
                   const Text(

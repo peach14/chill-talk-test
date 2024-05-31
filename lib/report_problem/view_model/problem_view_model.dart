@@ -21,6 +21,7 @@ class ProblemViewModel extends GetxController {
 
     final response = errorModelLoginFromJson(res);
     if (response.status == 0) {
+      // ignore: use_build_context_synchronously
       dialogAlert(
         context: context,
         content: Text(response.message),
@@ -33,6 +34,7 @@ class ProblemViewModel extends GetxController {
         },
       );
     } else {
+      // ignore: use_build_context_synchronously
       dialogAlert(
         context: context,
         content: Text(response.message),

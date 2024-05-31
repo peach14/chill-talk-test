@@ -5,12 +5,12 @@ import 'package:get/get.dart';
 
 import '../../auth/view_model/login_view_model.dart';
 
-enum FormType { email, password }
+enum FormType { email, password, addNote }
 
 class TextFormFieldCustom extends GetView<LoginViewModel> {
   const TextFormFieldCustom({
     super.key,
-    this.controllers,
+    this.textControllers,
     this.formType,
     this.hintText,
     this.hintStyle,
@@ -34,7 +34,7 @@ class TextFormFieldCustom extends GetView<LoginViewModel> {
     this.iconSubmit,
   });
 
-  final TextEditingController? controllers;
+  final TextEditingController? textControllers;
   final String? hintText;
   final String? label;
   final String? field;
@@ -44,6 +44,7 @@ class TextFormFieldCustom extends GetView<LoginViewModel> {
   final String? prefixIcon;
   final bool? isPassword;
   final bool? enablePassword;
+  // ignore: prefer_typing_uninitialized_variables
   final suffixIcon;
   final double? height;
   final double? width;
@@ -59,8 +60,6 @@ class TextFormFieldCustom extends GetView<LoginViewModel> {
 
   @override
   build(BuildContext context) {
-    bool showPassword = false;
-
     return FormField(
       autovalidateMode: AutovalidateMode.always,
       validator: validator ??
@@ -70,7 +69,7 @@ class TextFormFieldCustom extends GetView<LoginViewModel> {
             }
             return null;
           },
-      initialValue: controllers?.text,
+      initialValue: textControllers?.text,
       builder: (FormFieldState<dynamic> field) {
         return Obx(() {
           return Column(
@@ -96,21 +95,21 @@ class TextFormFieldCustom extends GetView<LoginViewModel> {
                         field.didChange(value);
                       },
                   keyboardType: textInputType,
-                  controller: controllers,
+                  controller: textControllers,
                   style: textStyle,
                   decoration: FormType.email == formType
                       ? inputDecoration(
                           value: controller.validEmail.value,
                           context: context,
-                          controller: controller)
+                        )
                       : inputDecoration(
                           value: controller.validPass.value,
                           context: context,
-                          controller: controller),
+                        ),
                   obscureText: isPassword == true
                       ? iconSubmit != null
                           ? false
-                          : showPassword
+                          : controller.showPassword.value
                               ? false
                               : true
                       : false,
@@ -150,9 +149,9 @@ class TextFormFieldCustom extends GetView<LoginViewModel> {
                     ),
                   ),
                 ),
-              const SizedBox(
-                height: 32,
-              )
+              FormType.addNote == formType
+                  ? const SizedBox.shrink()
+                  : const SizedBox(height: 32)
             ],
           );
         });
@@ -160,10 +159,10 @@ class TextFormFieldCustom extends GetView<LoginViewModel> {
     );
   }
 
-  InputDecoration inputDecoration(
-      {required bool value,
-      required BuildContext context,
-      required LoginViewModel controller}) {
+  InputDecoration inputDecoration({
+    required bool value,
+    required BuildContext context,
+  }) {
     return InputDecoration(
         // enabled: true,
         filled: true,
@@ -220,15 +219,15 @@ class TextFormFieldCustom extends GetView<LoginViewModel> {
             ? IconButton(
                 onPressed: onPressed ??
                     () {
-                      // setState(() {
-                      //   showPassword = !showPassword;
-                      // });
+                      controller.setEnablePassword();
                     },
                 icon: iconSubmit ??
-                    const Icon(
+                    Icon(
                         size: 24,
                         color: Colors.deepOrange,
-                        true ? Icons.visibility : Icons.visibility_off))
+                        controller.showPassword.value
+                            ? Icons.visibility
+                            : Icons.visibility_off))
             : const SizedBox());
   }
 }

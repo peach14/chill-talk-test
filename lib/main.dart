@@ -1,6 +1,7 @@
 import 'package:chill_talk_test/main/view_model/bindings/app_binding.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+// ignore: depend_on_referenced_packages
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -36,7 +37,6 @@ class MyApp extends GetView {
   @override
   Widget build(BuildContext context) {
     Get.put(AppRouterProvider());
-
     final route = Get.find<AppRouterProvider>();
     return GetMaterialApp.router(
       initialBinding: AppBinding(),
