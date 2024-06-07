@@ -9,7 +9,8 @@ class DataClientViewModel extends GetxController {
 
   @override
   void onInit() async {
-    final getRespLogin = await SecureStorage.instance.read(kResponseLogin);
+    final getRespLogin =
+        await LocalStorageSecureService.instance.read(kResponseLogin);
     final respLogin = responseModelLoginFromJson(getRespLogin ?? '');
     data = respLogin;
     update();

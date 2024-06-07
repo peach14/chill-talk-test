@@ -6,4 +6,5 @@ class ApiEndPoints {
   final checkAuThen = "checkauthen.php";
   final checkRecordWord = "in.php";
   final insertProblem = "insertproblem.php";
+  final getHistory = "history.php?user_code=";
 }

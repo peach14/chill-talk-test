@@ -35,6 +35,7 @@ class LoginScreen extends GetView<LoginViewModel> {
               ),
               TextFormFieldCustom(
                 formType: FormType.password,
+                textInputType: TextInputType.number,
                 label: "รหัสผ่าน",
                 onChanged: (value) {
                   controller.setPassword(passwords: value!);

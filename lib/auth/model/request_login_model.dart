@@ -8,7 +8,7 @@ String requestModelToJson({required RequestModel data}) =>
 
 class RequestModel {
   String username;
-  int password;
+  String password;
 
   RequestModel({
     required this.username,

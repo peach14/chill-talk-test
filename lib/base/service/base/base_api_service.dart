@@ -18,8 +18,28 @@ class BaseApiService extends GetConnect {
     super.onInit();
   }
 
-  Future<dynamic> getRequest({required String url}) async {
-    return await _dio.get(url);
+  Future<dynamic> getRequest(
+      {required BuildContext context, required String url}) async {
+    var connectivityResult = await Connectivity().checkConnectivity();
+
+    if (connectivityResult != ConnectivityResult.none) {
+      try {
+        return await _dio.get("${ApiEndPoints.instan.getHistory}$url");
+      } catch (e) {
+        log("BESE_API>>getRequest>> ERROE>>>>>>>>>>>>$e");
+      }
+    } else {
+      // ignore: use_build_context_synchronously
+      dialogAlert(
+        context: context,
+        colorButton: const Color(0xff1a6cae),
+        content: const Text("ไม่พบ สัญญาณอินเตอร์เน็ต"),
+        onTap: () {
+          Navigator.pop(context);
+          // Reset isDialogShown when dialog is dismissed
+        },
+      );
+    }
   }
 
   Future<dynamic> postRequest(
@@ -41,12 +61,13 @@ class BaseApiService extends GetConnect {
           ),
         );
       } catch (e) {
-        log("BESE_API>>>> ERROE>>>>>>>>>>>>$e");
+        log("BESE_API>>postRequest>> ERROE>>>>>>>>>>>>$e");
       }
     } else {
       // ignore: use_build_context_synchronously
       dialogAlert(
         context: context,
+        colorButton: const Color(0xff1a6cae),
         content: const Text("ไม่พบ สัญญาณอินเตอร์เน็ต"),
         onTap: () {
           Navigator.pop(context);

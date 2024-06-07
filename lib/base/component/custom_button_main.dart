@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 class CustomIconButtonMain extends StatelessWidget {
   const CustomIconButtonMain({
     super.key,
-    required this.onTap,
+    this.onTap,
     required this.text,
     required this.icon,
   });
-  final void Function() onTap;
+  final void Function()? onTap;
   final String text;
   final String icon;
   @override

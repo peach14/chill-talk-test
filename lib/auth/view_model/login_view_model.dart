@@ -57,28 +57,30 @@ class LoginViewModel extends GetxController {
     }
   }
 
-  void login(
-      {required BuildContext context,
-      String? username,
-      String? password}) async {
-    //var passConvert = int.parse(textPassword.value);
-
+  void login({required BuildContext context}) async {
+    //  var passConvert = int.parse(textPassword.value);
+    print(textEmail.value);
+    print(textPassword.value);
     final res = await LoginService.instance.repoLogin(
-        requestModel:
-            RequestModel(username: 'test@nnmail.com', password: 123456),
+        requestModel: RequestModel(
+            username: textEmail.value, password: textPassword.value),
         context: context);
+    print(res);
     if (errorModelLoginFromJson(res).status == kNoSuccessToken) {
       resError.value = errorModelLoginFromJson(res);
-    }
-    if (responseModelLoginFromJson(res).status == keySuccessToken) {
+    } else if (responseModelLoginFromJson(res).status == keySuccessToken) {
       response = responseModelLoginFromJson(res);
-      SecureStorage.instance.write(kResponseLogin, res);
-      String? getResponse = await SecureStorage.instance.read(kResponseLogin);
+      LocalStorageSecureService.instance.write(kResponseLogin, res);
+      String? getResponse =
+          await LocalStorageSecureService.instance.read(kResponseLogin);
       final token =
           responseModelLoginFromJson(getResponse ?? 'NoData_Get_response');
-      SecureStorage.instance.saveToken(token.status.toString());
-      String encoded = base64.encode(utf8.encode("123456"));
-      SecureStorage.instance.savePass(encoded);
+      LocalStorageSecureService.instance.saveToken(token.status.toString());
+      String encoded = base64.encode(utf8.encode(textPassword.value));
+      LocalStorageSecureService.instance.savePass(encoded);
+      textEmail.value = '';
+      textPassword.value = '';
+      resError.value = ErrorModelLogin(status: 9, message: '');
       // ignore: use_build_context_synchronously
       context.go(kNevMain);
     }

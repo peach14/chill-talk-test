@@ -144,7 +144,11 @@ class _ReportProblemScreenState extends State<ReportProblemScreen> {
                             Expanded(
                               child: CustomDropDown(
                                 isExpanded: true,
-                                item: ["asdas", "asdasd", "asd"],
+                                item: [
+                                  "ปัญหาในระบบ",
+                                  "ปัญหาในสำนักงาน",
+                                  "ปัญหาบุคลากร"
+                                ],
                                 direction: DropdownDirection.textDirection,
                               ),
                             ),

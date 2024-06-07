@@ -1,8 +1,8 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-class SecureStorage {
-  SecureStorage._();
-  static final instance = SecureStorage._();
+class LocalStorageSecureService {
+  LocalStorageSecureService._();
+  static final instance = LocalStorageSecureService._();
 
   // ignore: non_constant_identifier_names
   final String _auth_token = "auth_token";

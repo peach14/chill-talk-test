@@ -21,6 +21,69 @@ class RecordWorkViewModel extends GetxController {
   final date = "".obs;
 
   final time = DateFormat('h:mm a').format(DateTime.now()).obs;
+  final disableAttendWork = true.obs;
+  @override
+  void onInit() async {
+    await loadLocation();
+    Timer.periodic(const Duration(seconds: 1), (_) {
+      time.value = DateFormat('h:mm a').format(DateTime.now());
+      _recordAttendWork();
+      _recordOutWork();
+    });
+    final dateFormat = DateFormat('EEEE d MMMM y', 'th');
+    final formattedDate = dateFormat.format(DateTime.now());
+    final buddhistYear = DateTime.now().year + 543;
+    date.value = formattedDate.replaceFirst(
+        DateTime.now().year.toString(), buddhistYear.toString());
+    super.onInit();
+  }
+
+  void _recordAttendWork() {
+    final now = DateTime.now();
+    final currentTime = DateFormat('HH:mm').format(now);
+    final morningStart = DateTime(0, 1, 1, 05, 00);
+    final morningEnd = DateTime(0, 1, 1, 13, 31);
+    // final middayStart = DateTime(0, 1, 1, 12, 00);
+    // final middayEnd = DateTime(0, 1, 1, 13, 30);
+
+    final parsedCurrentTime = _parseTime(currentTime);
+
+    if ((parsedCurrentTime.isAfter(morningStart) ||
+            parsedCurrentTime.isAtSameMomentAs(morningStart)) &&
+        (parsedCurrentTime.isBefore(morningEnd) ||
+            parsedCurrentTime.isAtSameMomentAs(morningEnd))) {
+      disableAttendWork.value = true;
+    } else {
+      disableAttendWork.value = false;
+    }
+  }
+
+  final disableOutWork = true.obs;
+  void _recordOutWork() {
+    final now = DateTime.now();
+    final currentTime = DateFormat('HH:mm').format(now);
+    final eveningStart = DateTime(0, 1, 1, 17, 00);
+    final eveningEnd = DateTime(0, 1, 1, 19, 00);
+
+    final parsedCurrentTime = _parseTime(currentTime);
+
+    if ((parsedCurrentTime.isAfter(eveningStart) ||
+            parsedCurrentTime.isAtSameMomentAs(eveningStart)) &&
+        (parsedCurrentTime.isBefore(eveningEnd) ||
+            parsedCurrentTime.isAtSameMomentAs(eveningEnd))) {
+      disableOutWork.value = true;
+    } else {
+      disableOutWork.value = false;
+    }
+  }
+
+  DateTime _parseTime(String time) {
+    final parts = time.split(':');
+    final hour = int.parse(parts[0]);
+    final minute = int.parse(parts[1]);
+
+    return DateTime(0, 1, 1, hour, minute);
+  }
 
   void getCurrentLocation({required BuildContext context}) async {
     showDialog(
@@ -39,7 +102,8 @@ class RecordWorkViewModel extends GetxController {
     // ignore: use_build_context_synchronously
     context.pop();
 
-    final getRespLogin = await SecureStorage.instance.read(kResponseLogin);
+    final getRespLogin =
+        await LocalStorageSecureService.instance.read(kResponseLogin);
     final respLogin = responseModelLoginFromJson(getRespLogin ?? '');
     responseModelLogin = respLogin;
     // ignore: use_build_context_synchronously
@@ -55,7 +119,7 @@ class RecordWorkViewModel extends GetxController {
     if (response.status == 1) {
       // ignore: use_build_context_synchronously
       dialogAlert(
-        colorButton: Colors.red,
+        colorButton: const Color(0xff1a6cae),
         context: context,
         content: Text(response.message),
         onTap: () {
@@ -65,6 +129,7 @@ class RecordWorkViewModel extends GetxController {
     } else {
       // ignore: use_build_context_synchronously
       dialogAlert(
+        colorButton: const Color(0xff1a6cae),
         context: context,
         content: Text(response.message),
         onTap: () {
@@ -91,19 +156,5 @@ class RecordWorkViewModel extends GetxController {
     Position position = await permissionLocation();
 
     return position;
-  }
-
-  @override
-  void onInit() async {
-    await loadLocation();
-    Timer.periodic(const Duration(seconds: 1), (_) {
-      time.value = DateFormat('h:mm a').format(DateTime.now());
-    });
-    final dateFormat = DateFormat('EEEE d MMMM y', 'th');
-    final formattedDate = dateFormat.format(DateTime.now());
-    final buddhistYear = DateTime.now().year + 543;
-    date.value = formattedDate.replaceFirst(
-        DateTime.now().year.toString(), buddhistYear.toString());
-    super.onInit();
   }
 }

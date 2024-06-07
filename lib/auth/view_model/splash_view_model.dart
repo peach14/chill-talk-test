@@ -16,23 +16,39 @@ class SplashViewModel extends GetxController {
   Future<void> checkTokenAndNavigate({required BuildContext context}) async {
     // get Data in Local
     ErrorModelLogin? resError;
-    final getRespLogin = await SecureStorage.instance.read(kResponseLogin);
-    final respLogin = responseModelLoginFromJson(getRespLogin ?? '');
-    final pass = await SecureStorage.instance.getPass();
-    String decoded = utf8.decode(base64.decode(pass ?? ''));
+    ResponseModelLogin? localResp;
+    ResponseModelLogin? respLogin;
+    final getRespLogin =
+        await LocalStorageSecureService.instance.read(kResponseLogin);
+    if (getRespLogin != null) {
+      localResp = responseModelLoginFromJson(getRespLogin);
+    }
+
+    final pass = await LocalStorageSecureService.instance.getPass();
+    String? decoded;
+
+    if (pass != null) {
+      decoded = utf8.decode(base64.decode(pass));
+    } else {
+      decoded = '99';
+    }
+
     int paaConvert = int.parse(decoded);
 
 // refresh Login
     // ignore: use_build_context_synchronously
     final res = await LoginService.instance.refreshRepoLogin(
         requestModel:
-            RequestModel(username: respLogin.email, password: paaConvert),
+            RequestModel(username: localResp?.email ?? '', password: decoded),
         context: context);
-    final refLogin = responseModelLoginFromJson(res);
-    resError = errorModelLoginFromJson(res);
-    final getToken = await SecureStorage.instance.getToken();
+    try {
+      respLogin = responseModelLoginFromJson(res);
+    } catch (e) {
+      resError = errorModelLoginFromJson(res);
+    }
 
 // check Status user
+    final getToken = await LocalStorageSecureService.instance.getToken();
     // ignore: unnecessary_null_comparison
     if (resError != null) {
       int statusLocal = int.parse(getToken ?? '7');
@@ -47,7 +63,7 @@ class SplashViewModel extends GetxController {
     } else {
       int statusLocal = int.parse(getToken ?? '7');
 
-      if (statusLocal == refLogin.status) {
+      if (statusLocal == respLogin?.status) {
         // ignore: use_build_context_synchronously
         context.go(kNevMain);
       } else {
