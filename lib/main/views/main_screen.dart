@@ -12,7 +12,6 @@ import '../../base/component/dialog_call.dart';
 import '../../base/config/routing/route_path.dart';
 import '../../base/utils/constants/asset_phat.dart';
 import '../../history/view_model/history_view_model.dart';
-import '../view_model/out_work_view_model.dart';
 
 class MainScreen extends GetView<RecordWorkViewModel> {
   const MainScreen({super.key});
@@ -20,9 +19,8 @@ class MainScreen extends GetView<RecordWorkViewModel> {
   @override
   Widget build(BuildContext context) {
     Get.put<DataClientViewModel>(DataClientViewModel());
-    Get.lazyPut<OutWorkViewModel>(() => OutWorkViewModel());
     Get.lazyPut<HistoryViewModel>(() => HistoryViewModel());
-    Get.lazyPut<LogoutViewMode>(() => LogoutViewMode());
+    Get.lazyPut<LogoutViewModel>(() => LogoutViewModel());
 
     return BaseScaffoldMain(
       bodyTop: SafeArea(
@@ -34,7 +32,7 @@ class MainScreen extends GetView<RecordWorkViewModel> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 const Spacer(flex: 27),
-                GetBuilder<LogoutViewMode>(
+                GetBuilder<LogoutViewModel>(
                   builder: (controller) => IconButton(
                       alignment: Alignment.centerRight,
                       onPressed: () {
@@ -77,7 +75,7 @@ class MainScreen extends GetView<RecordWorkViewModel> {
             ),
             const SizedBox(height: 8),
             Obx(
-              () => Text("${controller.date}",
+              () => Text("${controller.dates}",
                   style: const TextStyle(
                       color: Colors.white,
                       fontSize: 18,
@@ -118,16 +116,35 @@ class MainScreen extends GetView<RecordWorkViewModel> {
           const Spacer(),
           Obx(() => CustomBottomHome(
                 icon: IconPhat.out1Icon,
+                borderColor: controller.disableAttendWork.value == false
+                    ? Colors.grey.shade300
+                    : const Color(0xff1a6cae),
+                color: controller.disableAttendWork.value == false
+                    ? Colors.grey.shade300
+                    : const Color(0xff1a6cae),
+                textColor: controller.disableAttendWork.value == false
+                    ? Colors.grey.shade500
+                    : Colors.white,
                 text: 'บันทึก\nเข้างาน',
                 onTap: controller.disableAttendWork.value == false
                     ? null
                     : () => controller.getCurrentLocation(context: context),
+                disable: controller.disableAttendWork.value,
               )),
           const Spacer(),
+          //  Color(0xffBDBDBD)
           Obx(() => CustomBottomHome(
+                disable: controller.disableOutWork.value,
+                borderColor: controller.disableOutWork.value == false
+                    ? Colors.grey.shade300
+                    : const Color(0xff1a6cae),
                 icon: IconPhat.out2Icon,
-                color: Colors.white,
-                textColor: const Color(0xff1a6cae),
+                color: controller.disableOutWork.value == false
+                    ? Colors.grey.shade300
+                    : Colors.white,
+                textColor: controller.disableOutWork.value == false
+                    ? Colors.grey.shade500 //const Color(0xffBDBDBD)
+                    : const Color(0xff1a6cae),
                 text: 'บันทึก\nออกงาน',
                 onTap: controller.disableOutWork.value == false
                     ? null

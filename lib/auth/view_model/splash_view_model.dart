@@ -33,7 +33,7 @@ class SplashViewModel extends GetxController {
       decoded = '99';
     }
 
-    int paaConvert = int.parse(decoded);
+    // int paaConvert = int.parse(decoded);
 
 // refresh Login
     // ignore: use_build_context_synchronously

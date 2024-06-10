@@ -106,7 +106,7 @@ Future<dynamic> dialogCall({
                       width: buttonWidth,
                       alignment: Alignment.center,
                       child: const Text(
-                        "ปิด",
+                        "ยกเลิก",
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,

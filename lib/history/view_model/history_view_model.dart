@@ -14,20 +14,20 @@ class HistoryViewModel extends GetxController {
   void loadDataHistory(BuildContext context) async {
     final res = await HistoryService.instance.repoHistory(context: context);
     print(res);
-    final test = [
-      {"date": "2024-03-21", "time": "07:21"},
-      {"date": "2024-03-21", "time": "13:00"},
-      {"date": "2024-03-21", "time": "17:02"},
-      {"date": "2024-03-22", "time": "07:01"},
-      {"date": "2024-03-22", "time": "17:02"},
-      {"date": "2024-05-01", "time": "08:31"},
-      {"date": "2024-05-01", "time": "13:01"},
-      {"date": "2024-05-01", "time": "19:01"},
-      {"date": "2024-05-03", "time": "12:00"},
-      {"date": "2024-05-03", "time": "19:01"},
-      {"date": "2024-07-20", "time": "11:59"},
-      {"date": "2024-07-20", "time": "19:07"},
-    ];
+    // final test = [
+    //   {"date": "2024-03-21", "time": "07:21"},
+    //   {"date": "2024-03-21", "time": "13:00"},
+    //   {"date": "2024-03-21", "time": "17:02"},
+    //   {"date": "2024-03-22", "time": "07:01"},
+    //   {"date": "2024-03-22", "time": "17:02"},
+    //   {"date": "2024-05-01", "time": "08:31"},
+    //   {"date": "2024-05-01", "time": "13:01"},
+    //   {"date": "2024-05-01", "time": "19:01"},
+    //   {"date": "2024-05-03", "time": "12:00"},
+    //   {"date": "2024-05-03", "time": "19:01"},
+    //   {"date": "2024-07-20", "time": "11:59"},
+    //   {"date": "2024-07-20", "time": "19:07"},
+    // ];
     final resModel = historyModelFromJson(str: res);
     // Group the data by date
     final Map<String, List<String>> groupedData = {};

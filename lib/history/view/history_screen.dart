@@ -70,12 +70,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
                       String formattedDate =
                           '$shortDayOfWeek ${parsedDate.day}/${parsedDate.month}/$thaiYear';
-                      String? morningTime;
-                      String? lateMorningTime;
-                      String? afternoonTime;
-                      String? lateAfternoonTime;
-                      String? eveningTime;
-                      String? lateEveningTime;
                       List<String> times = controller.showGroupedData[date]!;
 
                       DateTime parseTime(String time) {
@@ -83,7 +77,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                         final hour = int.parse(parts[0]);
                         final minute = int.parse(parts[1]);
 
-                        return DateTime(0, 0, 0, hour, minute);
+                        return DateTime(0, 1, 1, hour, minute);
                       }
 
                       bool isTimeInRange(DateTime currentTime, String startTime,
@@ -96,6 +90,13 @@ class _HistoryScreenState extends State<HistoryScreen> {
                             (currentTime.isBefore(end) ||
                                 currentTime.isAtSameMomentAs(end));
                       }
+
+                      String? morningTime;
+                      String? lateMorningTime;
+                      String? afternoonTime;
+                      String? lateAfternoonTime;
+                      String? eveningTime;
+                      String? lateEveningTime;
 
                       for (var time in times) {
                         final parsedTime = parseTime(time);
@@ -122,7 +123,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
                           }
                         }
                       }
-
                       return Container(
                         padding: const EdgeInsets.symmetric(vertical: 8),
                         decoration: const BoxDecoration(
@@ -143,7 +143,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                               children: [
                                 if (lateMorningTime != null)
                                   Text(
-                                    "เข้า(เช้า) : $lateMorningTime น.",
+                                    "เข้า(เช้า) : ${lateMorningTime} น.",
                                     style: const TextStyle(
                                         fontWeight: FontWeight.w400,
                                         fontSize: 14,
@@ -151,7 +151,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                   ),
                                 if (morningTime != null)
                                   Text(
-                                    "เข้า(เช้า) : $morningTime น.",
+                                    "เข้า(เช้า) : ${morningTime} น.",
                                     style: const TextStyle(
                                         fontWeight: FontWeight.w400,
                                         fontSize: 14,

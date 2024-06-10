@@ -6,7 +6,7 @@ import '../../base/config/routing/route_path.dart';
 import '../../base/service/local_storage/secure_storage_service.dart';
 import '../../base/utils/constants/constants.dart';
 
-class LogoutViewMode extends GetxController {
+class LogoutViewModel extends GetxController {
   Future<void> logout({required BuildContext context}) async {
     LocalStorageSecureService.instance.deleteToken();
     LocalStorageSecureService.instance.delete(kResponseLogin);

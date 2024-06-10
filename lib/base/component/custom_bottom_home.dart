@@ -9,21 +9,26 @@ class CustomBottomHome extends StatelessWidget {
     this.textColor,
     this.radius,
     this.onTap,
+    this.borderColor,
+    required this.disable,
   });
   final String icon;
   final String text;
   final Color? color;
+  final Color? borderColor;
   final Color? textColor;
   final double? radius;
+  final bool disable;
   final void Function()? onTap;
   @override
   Widget build(BuildContext context) {
     return Material(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(radius ?? 12),
-        side: const BorderSide(
+        side: BorderSide(
             width: 1.2,
-            color: Color(0xff1a6cae)), // Define the border properties here
+            color: borderColor ??
+                const Color(0xff1a6cae)), // Define the border properties here
       ),
       color: color ?? const Color(0xff1a6cae),
       elevation: 5,
@@ -42,9 +47,15 @@ class CustomBottomHome extends StatelessWidget {
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.004,
               ),
-              Image.asset(
-                icon,
-              )
+              disable == true
+                  ? Image.asset(
+                      icon,
+                    )
+                  : Icon(
+                      Icons.lock_clock_outlined,
+                      color: Colors.grey.shade500,
+                      size: 40,
+                    )
             ],
           ),
         ),

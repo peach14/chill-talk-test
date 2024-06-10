@@ -18,13 +18,14 @@ class RecordWorkViewModel extends GetxController {
   ResponseModelLogin? responseModelLogin;
 
   // Format the current date using the Thai Buddhist calendar
-  final date = "".obs;
+  final dates = "".obs;
 
   final time = DateFormat('h:mm a').format(DateTime.now()).obs;
   final disableAttendWork = true.obs;
   @override
   void onInit() async {
-    await loadLocation();
+    _recordAttendWork();
+    _recordOutWork();
     Timer.periodic(const Duration(seconds: 1), (_) {
       time.value = DateFormat('h:mm a').format(DateTime.now());
       _recordAttendWork();
@@ -33,8 +34,9 @@ class RecordWorkViewModel extends GetxController {
     final dateFormat = DateFormat('EEEE d MMMM y', 'th');
     final formattedDate = dateFormat.format(DateTime.now());
     final buddhistYear = DateTime.now().year + 543;
-    date.value = formattedDate.replaceFirst(
+    dates.value = formattedDate.replaceFirst(
         DateTime.now().year.toString(), buddhistYear.toString());
+    await loadLocation();
     super.onInit();
   }
 
@@ -63,7 +65,7 @@ class RecordWorkViewModel extends GetxController {
     final now = DateTime.now();
     final currentTime = DateFormat('HH:mm').format(now);
     final eveningStart = DateTime(0, 1, 1, 17, 00);
-    final eveningEnd = DateTime(0, 1, 1, 19, 00);
+    final eveningEnd = DateTime(0, 1, 1, 19, 30);
 
     final parsedCurrentTime = _parseTime(currentTime);
 
