@@ -1,4 +1,5 @@
 import 'package:cell_calendar/cell_calendar.dart';
+import 'package:chill_talk_test/base/theme/custom_text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
@@ -6,7 +7,6 @@ import 'package:go_router/go_router.dart';
 import '../../base/config/routing/route_path.dart';
 import '../../base/utils/constants/asset_phat.dart';
 import '../../main/view_model/bindings/app_binding.dart';
-import '../service/data_calender.dart';
 import '../view_model/calender_view_model.dart';
 import '../view_model/detail_view_model.dart';
 
@@ -19,15 +19,6 @@ class CalenderScreen extends GetView<CalenderViewModel> {
     final events = controller.sampleEvents;
     return Scaffold(
       appBar: AppBar(
-        actions: [
-          IconButton(
-              onPressed: () {
-                DaDtaCalender.instance.dataCalender.forEach((element) {
-                  print(element);
-                });
-              },
-              icon: Icon(Icons.check))
-        ],
         leading: InkWell(
             // radius: ,
             borderRadius: BorderRadius.circular(50),
@@ -49,13 +40,13 @@ class CalenderScreen extends GetView<CalenderViewModel> {
               child: const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Text("อา.", style: TextStyle(color: Colors.white)),
-                  Text("จ.", style: TextStyle(color: Colors.white)),
-                  Text("อ.", style: TextStyle(color: Colors.white)),
-                  Text("พ.", style: TextStyle(color: Colors.white)),
-                  Text("พฤ.", style: TextStyle(color: Colors.white)),
-                  Text("ศ.", style: TextStyle(color: Colors.white)),
-                  Text("ส.", style: TextStyle(color: Colors.white)),
+                  Text("อา.", style: CustomTextStyles.body7),
+                  Text("จ.", style: CustomTextStyles.body7),
+                  Text("อ.", style: CustomTextStyles.body7),
+                  Text("พ.", style: CustomTextStyles.body7),
+                  Text("พฤ.", style: CustomTextStyles.body7),
+                  Text("ศ.", style: CustomTextStyles.body7),
+                  Text("ส.", style: CustomTextStyles.body7),
                 ],
               ),
             )),

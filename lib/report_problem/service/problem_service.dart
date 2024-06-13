@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../base/service/base/api_endpoints.dart';
 import '../../base/service/base/base_api_service.dart';
+import '../../base/theme/custom_colors.dart';
 import '../model/request_problem_model.dart';
 
 class ProblemService {
@@ -18,10 +19,11 @@ class ProblemService {
       barrierColor: Colors.transparent,
       barrierDismissible: false,
       context: context,
-      builder: (context) => Center(
+      builder: (context) => const Center(
         child: CircularProgressIndicator(
-          color: const Color(0xff1a6cae),
-          backgroundColor: Colors.grey.shade400, // Corrected "gray" to "grey"
+          color: CustomColors.primaryColor,
+          backgroundColor:
+              CustomColors.borderColor2, // Corrected "gray" to "grey"
         ),
       ),
     );

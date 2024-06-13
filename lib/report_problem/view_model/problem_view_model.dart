@@ -1,3 +1,4 @@
+import 'package:chill_talk_test/base/theme/custom_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
@@ -25,7 +26,7 @@ class ProblemViewModel extends GetxController {
       dialogAlert(
         context: context,
         content: Text(response.message),
-        colorButton: Colors.red,
+        colorButton: CustomColors.errorColor,
         onTap: () {
           // Navigator.pop(context);
           context.pop();

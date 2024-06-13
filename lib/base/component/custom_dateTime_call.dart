@@ -1,3 +1,4 @@
+import 'package:chill_talk_test/base/theme/custom_colors.dart';
 import 'package:flutter/material.dart';
 
 class CustomDateTimeCall {
@@ -23,12 +24,12 @@ class CustomDateTimeCall {
               colorScheme: ColorScheme.light(
                 onBackground: onBackground,
                 primary: primary, // Header background color
-                onPrimary: Colors.white, // Header text color
-                onSurface: Colors.black, // Body text color
+                onPrimary: CustomColors.onBackgroundColor, // Header text color
+                onSurface: CustomColors.text1Color, // Body text color
               ),
               textButtonTheme: TextButtonThemeData(
                 style: TextButton.styleFrom(
-                  foregroundColor: Colors.black, // Button text color
+                  foregroundColor: CustomColors.text1Color, // Button text color
                 ),
               ),
             ),

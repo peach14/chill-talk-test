@@ -1,3 +1,4 @@
+import 'package:chill_talk_test/base/theme/custom_colors.dart';
 import 'package:flutter/material.dart';
 
 class CustomBottomHome extends StatelessWidget {
@@ -28,9 +29,9 @@ class CustomBottomHome extends StatelessWidget {
         side: BorderSide(
             width: 1.2,
             color: borderColor ??
-                const Color(0xff1a6cae)), // Define the border properties here
+               CustomColors.primaryColor), // Define the border properties here
       ),
-      color: color ?? const Color(0xff1a6cae),
+      color: color ??  CustomColors.primaryColor,
       elevation: 5,
       child: InkWell(
         onTap: onTap,
@@ -41,7 +42,7 @@ class CustomBottomHome extends StatelessWidget {
               Text(
                 text,
                 style: TextStyle(
-                    color: textColor ?? Colors.white,
+                    color: textColor ??  CustomColors.onBackgroundColor,
                     fontWeight: FontWeight.w600),
               ),
               SizedBox(

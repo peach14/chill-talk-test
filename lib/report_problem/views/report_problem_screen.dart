@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../base/component/custom_dropdown.dart';
 import '../../base/config/routing/route_path.dart';
+import '../../base/theme/custom_colors.dart';
 import '../../base/utils/constants/asset_phat.dart';
 import '../view_model/problem_view_model.dart';
 
@@ -56,7 +57,7 @@ class _ReportProblemScreenState extends State<ReportProblemScreen> {
                               "บันทึก",
                               style: TextStyle(
                                   fontSize: 14,
-                                  color: Color(0xff1a6cae),
+                                  color: CustomColors.primaryColor,
                                   fontWeight: FontWeight.w500)
                               //TextStyle(fontSize: 14),
                               ),
@@ -84,7 +85,7 @@ class _ReportProblemScreenState extends State<ReportProblemScreen> {
                           style: TextStyle(
                               height: 1.5,
                               fontSize: 14,
-                              color: Color(0xff1a6cae),
+                              color: CustomColors.primaryColor,
                               fontWeight: FontWeight.bold),
                         ),
                         Material(
@@ -136,7 +137,7 @@ class _ReportProblemScreenState extends State<ReportProblemScreen> {
                           style: TextStyle(
                               height: 1.5,
                               fontSize: 14,
-                              color: Color(0xff1a6cae),
+                              color: CustomColors.primaryColor,
                               fontWeight: FontWeight.bold),
                         ),
                         const Row(
@@ -160,7 +161,7 @@ class _ReportProblemScreenState extends State<ReportProblemScreen> {
                           style: TextStyle(
                               height: 1.5,
                               fontSize: 14,
-                              color: Color(0xff1a6cae),
+                              color: CustomColors.primaryColor,
                               fontWeight: FontWeight.bold),
                         ),
                         buildTextFormField(),
@@ -181,22 +182,22 @@ class _ReportProblemScreenState extends State<ReportProblemScreen> {
         maxLines: null,
         textAlignVertical: TextAlignVertical.top, // align text to the top
         clipBehavior: Clip.antiAlias,
-        decoration: InputDecoration(
-          contentPadding: const EdgeInsets.only(left: 8, top: 8, bottom: 99),
+        decoration: const InputDecoration(
+          contentPadding: EdgeInsets.only(left: 8, top: 8, bottom: 99),
           filled: true,
-          fillColor: Colors.white38,
-          disabledBorder: const OutlineInputBorder(
+          fillColor: CustomColors.borderColor1,
+          disabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(12)),
-              borderSide: BorderSide(color: Colors.white38)),
+              borderSide: BorderSide(color: CustomColors.primaryColor)),
           enabledBorder: OutlineInputBorder(
-              borderRadius: const BorderRadius.all(Radius.circular(12)),
-              borderSide: BorderSide(color: Colors.grey.shade400)),
-          focusedBorder: const OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(12)),
-              borderSide: BorderSide(color: Colors.green)),
-          border: const OutlineInputBorder(
+              borderSide: BorderSide(color: CustomColors.borderColor2)),
+          focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(12)),
-              borderSide: BorderSide(color: Color(0xff1a6cae))),
+              borderSide: BorderSide(color: CustomColors.primaryColor)),
+          border: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(12)),
+              borderSide: BorderSide(color: CustomColors.primaryColor)),
           // isDense: true,
         ));
   }

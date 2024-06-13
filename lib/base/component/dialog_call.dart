@@ -1,4 +1,7 @@
+import 'package:chill_talk_test/base/theme/custom_colors.dart';
 import 'package:flutter/material.dart';
+
+import '../theme/custom_text_styles.dart';
 
 Future<dynamic> dialogCall({
   required BuildContext context,
@@ -8,7 +11,7 @@ Future<dynamic> dialogCall({
   String? textButton,
   double? buttonWidth,
   Color? colorButton,
-  Function()? conferm,
+  Function()? confirm,
   Function()? canCle,
   bool? barrierDismissible,
 }) {
@@ -41,11 +44,7 @@ Future<dynamic> dialogCall({
               Text(
                 alertTitle,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.blue,
-                ),
+                style: CustomTextStyles.body2,
               ),
             }
           ],
@@ -73,19 +72,15 @@ Future<dynamic> dialogCall({
                   elevation: 4,
                   child: InkWell(
                     borderRadius: BorderRadius.circular(32),
-                    onTap: conferm,
+                    onTap: confirm,
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 30),
+                      padding: const EdgeInsets.symmetric(horizontal: 30),
                       height: 48,
                       width: buttonWidth,
                       alignment: Alignment.center,
                       child: const Text(
                         "ยืนยัน",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.white,
-                        ),
+                        style: CustomTextStyles.body3,
                       ),
                     ),
                   ),
@@ -94,24 +89,20 @@ Future<dynamic> dialogCall({
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 5),
                 child: Material(
-                  color: colorButton ?? const Color(0xff1a6cae),
+                  color: colorButton ?? CustomColors.primaryColor,
                   borderRadius: BorderRadius.circular(32),
                   elevation: 4,
                   child: InkWell(
                     borderRadius: BorderRadius.circular(32),
                     onTap: canCle,
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 30),
+                      padding: const EdgeInsets.symmetric(horizontal: 30),
                       height: 48,
                       width: buttonWidth,
                       alignment: Alignment.center,
                       child: const Text(
                         "ยกเลิก",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.white,
-                        ),
+                        style: CustomTextStyles.body3,
                       ),
                     ),
                   ),

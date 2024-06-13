@@ -1,9 +1,11 @@
+import 'package:chill_talk_test/base/theme/custom_text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../base/component/base_scaffold_auth.dart';
 import '../../base/component/button_custom.dart';
 import '../../base/component/text_form_field_custom.dart';
+import '../../base/theme/custom_colors.dart';
 import '../../base/utils/constants/asset_phat.dart';
 import '../view_model/login_view_model.dart';
 
@@ -45,7 +47,7 @@ class LoginScreen extends GetView<LoginViewModel> {
               Obx(() {
                 return controller.resError.value.status == 0
                     ? Text(controller.resError.value.message,
-                        style: const TextStyle(color: Colors.red))
+                        style: CustomTextStyles.body4)
                     : const SizedBox.shrink();
               }),
               const SizedBox(
@@ -53,15 +55,12 @@ class LoginScreen extends GetView<LoginViewModel> {
               ),
               ButtonCustom(
                   borderRadius: 12,
-                  color: const Color(0xff1a6cae),
-                  borderColors: const Color(0xff1a6cae),
+                  color: CustomColors.primaryColor,
+                  borderColors: CustomColors.primaryColor,
                   width: double.infinity,
                   height: 45,
                   text: 'เข้าสู่ระบบ',
-                  textStyle: const TextStyle(
-                      fontSize: 14,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold),
+                  textStyle: CustomTextStyles.body5,
                   onTap: () {
                     controller.setValidate(context: context);
                   })

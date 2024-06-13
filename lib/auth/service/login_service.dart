@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:chill_talk_test/base/theme/custom_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
@@ -20,10 +21,11 @@ class LoginService {
       barrierColor: Colors.transparent,
       barrierDismissible: false,
       context: context,
-      builder: (context) => Center(
+      builder: (context) => const Center(
         child: CircularProgressIndicator(
-          color: const Color(0xff1a6cae),
-          backgroundColor: Colors.grey.shade400, // Corrected "gray" to "grey"
+          color: CustomColors.primaryColor,
+          backgroundColor:
+              CustomColors.borderColor2, // Corrected "gray" to "grey"
         ),
       ),
     );

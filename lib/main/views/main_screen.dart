@@ -10,6 +10,7 @@ import '../../base/component/custom_bottom_home.dart';
 import '../../base/component/custom_button_main.dart';
 import '../../base/component/dialog_call.dart';
 import '../../base/config/routing/route_path.dart';
+import '../../base/theme/custom_colors.dart';
 import '../../base/utils/constants/asset_phat.dart';
 import '../../history/view_model/history_view_model.dart';
 
@@ -38,7 +39,7 @@ class MainScreen extends GetView<RecordWorkViewModel> {
                       onPressed: () {
                         dialogCall(
                             context: context,
-                            conferm: () {
+                            confirm: () {
                               controller.logout(context: context);
                               context.pop();
                             },
@@ -49,7 +50,7 @@ class MainScreen extends GetView<RecordWorkViewModel> {
                       },
                       icon: const Icon(
                         Icons.power_settings_new,
-                        color: Color(0xfff40201),
+                        color: CustomColors.errorColor,
                       )),
                 ),
                 const Spacer()
@@ -58,7 +59,7 @@ class MainScreen extends GetView<RecordWorkViewModel> {
 
             const Text("หน้าแรก",
                 style: TextStyle(
-                    color: Colors.white,
+                    color: CustomColors.onBackgroundColor,
                     fontSize: 20,
                     fontWeight: FontWeight.bold)),
             const Spacer(flex: 2),
@@ -67,7 +68,7 @@ class MainScreen extends GetView<RecordWorkViewModel> {
                 return Text(
                   "${controller.time}",
                   style: const TextStyle(
-                      color: Colors.white,
+                      color: CustomColors.onBackgroundColor,
                       fontSize: 24,
                       fontWeight: FontWeight.w400),
                 );
@@ -77,7 +78,7 @@ class MainScreen extends GetView<RecordWorkViewModel> {
             Obx(
               () => Text("${controller.dates}",
                   style: const TextStyle(
-                      color: Colors.white,
+                      color: CustomColors.onBackgroundColor,
                       fontSize: 18,
                       fontWeight: FontWeight.w500)),
             ),
@@ -87,7 +88,7 @@ class MainScreen extends GetView<RecordWorkViewModel> {
                 return Text(
                     "${controller.data?.name ?? ''} ${controller.data?.surname ?? ''}",
                     style: const TextStyle(
-                        color: Colors.white,
+                        color: CustomColors.onBackgroundColor,
                         fontSize: 20,
                         fontWeight: FontWeight.w600));
               },
@@ -102,7 +103,7 @@ class MainScreen extends GetView<RecordWorkViewModel> {
                 ),
                 const Text("Chilltalk Co.th",
                     style: TextStyle(
-                        color: Colors.white,
+                        color: CustomColors.onBackgroundColor,
                         fontSize: 14,
                         fontWeight: FontWeight.w400)),
               ],
@@ -117,14 +118,14 @@ class MainScreen extends GetView<RecordWorkViewModel> {
           Obx(() => CustomBottomHome(
                 icon: IconPhat.out1Icon,
                 borderColor: controller.disableAttendWork.value == false
-                    ? Colors.grey.shade300
-                    : const Color(0xff1a6cae),
+                    ? CustomColors.borderColor
+                    : CustomColors.primaryColor,
                 color: controller.disableAttendWork.value == false
-                    ? Colors.grey.shade300
-                    : const Color(0xff1a6cae),
+                    ? CustomColors.borderColor
+                    : CustomColors.primaryColor,
                 textColor: controller.disableAttendWork.value == false
-                    ? Colors.grey.shade500
-                    : Colors.white,
+                    ? CustomColors.textColor
+                    : CustomColors.onBackgroundColor,
                 text: 'บันทึก\nเข้างาน',
                 onTap: controller.disableAttendWork.value == false
                     ? null
@@ -136,15 +137,15 @@ class MainScreen extends GetView<RecordWorkViewModel> {
           Obx(() => CustomBottomHome(
                 disable: controller.disableOutWork.value,
                 borderColor: controller.disableOutWork.value == false
-                    ? Colors.grey.shade300
-                    : const Color(0xff1a6cae),
+                    ? CustomColors.borderColor
+                    : CustomColors.primaryColor,
                 icon: IconPhat.out2Icon,
                 color: controller.disableOutWork.value == false
-                    ? Colors.grey.shade300
-                    : Colors.white,
+                    ? CustomColors.borderColor
+                    : CustomColors.onBackgroundColor,
                 textColor: controller.disableOutWork.value == false
-                    ? Colors.grey.shade500 //const Color(0xffBDBDBD)
-                    : const Color(0xff1a6cae),
+                    ? CustomColors.textColor
+                    : CustomColors.primaryColor,
                 text: 'บันทึก\nออกงาน',
                 onTap: controller.disableOutWork.value == false
                     ? null

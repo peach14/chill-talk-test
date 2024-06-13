@@ -1,3 +1,4 @@
+import 'package:chill_talk_test/base/theme/custom_colors.dart';
 import 'package:flutter/material.dart';
 
 import '../utils/constants/asset_phat.dart';
@@ -10,7 +11,7 @@ class Loading extends StatefulWidget {
   const Loading(
       {super.key,
       this.height = 110,
-      this.color = Colors.white,
+      this.color = CustomColors.onBackgroundColor,
       this.loadingSize = 30});
 
   @override

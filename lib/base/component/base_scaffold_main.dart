@@ -1,3 +1,4 @@
+import 'package:chill_talk_test/base/theme/custom_colors.dart';
 import 'package:flutter/material.dart';
 
 class BaseScaffoldMain extends StatelessWidget {
@@ -20,7 +21,10 @@ class BaseScaffoldMain extends StatelessWidget {
                 child: Container(
               decoration: const BoxDecoration(
                   gradient: LinearGradient(
-                colors: [Color(0xff1568ac), Color(0xffffffff)],
+                colors: [
+                  CustomColors.primaryColor,
+                  CustomColors.onBackgroundColor
+                ],
                 begin: Alignment(0.00, -0.4),
                 end: Alignment(0, 2),
               )

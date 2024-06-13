@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../theme/custom_colors.dart';
+import '../theme/custom_text_styles.dart';
+
 class CustomDropDown extends ConsumerStatefulWidget {
   const CustomDropDown(
       {required this.item,
@@ -43,9 +46,7 @@ class _CustomDropDownState extends ConsumerState<CustomDropDown> {
             Expanded(
               child: Text(
                 widget.hint ?? '',
-                style: const TextStyle(
-                  color: Colors.black,
-                ),
+                style: CustomTextStyles.title,
                 overflow: TextOverflow.ellipsis,
               ),
             ),
@@ -72,11 +73,7 @@ class _CustomDropDownState extends ConsumerState<CustomDropDown> {
                   children: [
                     Text(
                       item,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
+                      style: CustomTextStyles.body1,
                       overflow: TextOverflow.ellipsis,
                     ),
                     // if (index == 0)
@@ -113,7 +110,7 @@ class _CustomDropDownState extends ConsumerState<CustomDropDown> {
             border: Border.all(
               color: Colors.black26,
             ),
-            color: Colors.white,
+            color: CustomColors.onBackgroundColor,
           ),
           elevation: 2,
         ),
@@ -122,7 +119,7 @@ class _CustomDropDownState extends ConsumerState<CustomDropDown> {
             Icons.arrow_forward_ios_outlined,
           ),
           iconSize: 14,
-          iconEnabledColor: Colors.black,
+          iconEnabledColor: CustomColors.text1Color,
           iconDisabledColor: Colors.grey,
         ),
         dropdownStyleData: DropdownStyleData(
@@ -132,7 +129,7 @@ class _CustomDropDownState extends ConsumerState<CustomDropDown> {
           // width: 200,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(14),
-            color: Colors.white,
+            color: CustomColors.onBackgroundColor,
           ),
           offset: const Offset(-20, 0),
           scrollbarTheme: ScrollbarThemeData(

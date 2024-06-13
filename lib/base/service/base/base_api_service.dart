@@ -1,10 +1,12 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:chill_talk_test/base/theme/custom_colors.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../component/dialog_alert.dart';
 import 'api_endpoints.dart';
@@ -32,10 +34,10 @@ class BaseApiService extends GetConnect {
       // ignore: use_build_context_synchronously
       dialogAlert(
         context: context,
-        colorButton: const Color(0xff1a6cae),
+        colorButton: CustomColors.primaryColor,
         content: const Text("ไม่พบ สัญญาณอินเตอร์เน็ต"),
         onTap: () {
-          Navigator.pop(context);
+          context.pop();
           // Reset isDialogShown when dialog is dismissed
         },
       );
@@ -67,10 +69,10 @@ class BaseApiService extends GetConnect {
       // ignore: use_build_context_synchronously
       dialogAlert(
         context: context,
-        colorButton: const Color(0xff1a6cae),
+        colorButton: CustomColors.primaryColor,
         content: const Text("ไม่พบ สัญญาณอินเตอร์เน็ต"),
         onTap: () {
-          Navigator.pop(context);
+          context.pop();
           // Reset isDialogShown when dialog is dismissed
         },
       );

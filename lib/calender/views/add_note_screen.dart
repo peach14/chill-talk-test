@@ -1,3 +1,4 @@
+import 'package:chill_talk_test/base/theme/custom_text_styles.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,6 +9,7 @@ import '../../../base/component/text_form_field_custom.dart';
 import '../../base/component/custom_dateTime_call.dart';
 import '../../base/component/custom_timeOfDay_call.dart';
 import '../../base/component/text_filed_form_details.dart';
+import '../../base/theme/custom_colors.dart';
 import '../../base/utils/constants/asset_phat.dart';
 import '../view_model/calender_view_model.dart';
 
@@ -22,7 +24,7 @@ class AddNoteScreen extends GetView<CalenderViewModel> {
             borderRadius: BorderRadius.circular(50),
             onTap: () => context.pop(),
             child: Image.asset(IconPhat.backButton)),
-        title: const Text("เพิ่มโน๊ต", style: TextStyle(fontSize: 20)),
+        title: const Text("เพิ่มโน๊ต", style: CustomTextStyles.header),
         actions: [
           Container(
             padding: const EdgeInsets.symmetric(vertical: 11, horizontal: 16),
@@ -39,12 +41,7 @@ class AddNoteScreen extends GetView<CalenderViewModel> {
                     child: Text(
                         textAlign: TextAlign.center,
                         "บันทึก",
-                        style: TextStyle(
-                            fontSize: 14,
-                            color: Color(0xff1a6cae),
-                            fontWeight: FontWeight.w500)
-                        //TextStyle(fontSize: 14),
-                        ),
+                        style: CustomTextStyles.title2),
                   ),
                 ),
               ),
@@ -66,11 +63,7 @@ class AddNoteScreen extends GetView<CalenderViewModel> {
                   ),
                   const Text(
                     "ประเภท",
-                    style: TextStyle(
-                        height: 1.5,
-                        fontSize: 14,
-                        color: Color(0xff1a6cae),
-                        fontWeight: FontWeight.bold),
+                    style: CustomTextStyles.title3,
                   ),
                   Row(
                     children: [
@@ -91,7 +84,7 @@ class AddNoteScreen extends GetView<CalenderViewModel> {
                       controller.setTitleText(date: value ?? '');
                       return null;
                     },
-                    broderColor: Colors.grey.shade400,
+                    broderColor: CustomColors.borderColor2,
                     label: "หัวข้อ",
                     formType: FormType.addNote,
                   ),
@@ -101,7 +94,7 @@ class AddNoteScreen extends GetView<CalenderViewModel> {
                             padding: EdgeInsets.only(top: 3),
                             child: Text(
                               "กรุณาเลือกประเภท หรือ ระบุหัวข้อ",
-                              style: TextStyle(color: Colors.red),
+                              style: CustomTextStyles.body4,
                             ),
                           )
                         : const SizedBox(),
@@ -112,11 +105,7 @@ class AddNoteScreen extends GetView<CalenderViewModel> {
                     children: [
                       const Text(
                         "วันที่",
-                        style: TextStyle(
-                            height: 1.5,
-                            fontSize: 14,
-                            color: Color(0xff1a6cae),
-                            fontWeight: FontWeight.bold),
+                        style: CustomTextStyles.title3,
                       ),
                       const SizedBox(height: 3),
                       Row(
@@ -128,13 +117,13 @@ class AddNoteScreen extends GetView<CalenderViewModel> {
                             onTap: () => controller.setCheckBox(),
                             child: Container(
                                 decoration: BoxDecoration(
-                                    color: Colors.grey.shade300,
+                                    color: CustomColors.borderColor,
                                     borderRadius: BorderRadius.circular(50)),
                                 child: Obx(
                                   () => controller.checkBox.value == true
                                       ? const Icon(
                                           Icons.done,
-                                          color: Colors.blue,
+                                          color: CustomColors.primaryColor,
                                         )
                                       : const Icon(
                                           Icons.done,
@@ -175,9 +164,10 @@ class AddNoteScreen extends GetView<CalenderViewModel> {
                                                             .startDate.value,
                                                         helpText:
                                                             'วันที่เริ่มลา',
-                                                        onBackground:
-                                                            Colors.blue,
-                                                        primary: Colors.blue);
+                                                        onBackground: CustomColors
+                                                            .onBackground1Color,
+                                                        primary: CustomColors
+                                                            .onBackground1Color);
                                             if (datetimeStart != null) {
                                               controller.setStartDate(
                                                   date: datetimeStart);
@@ -195,8 +185,10 @@ class AddNoteScreen extends GetView<CalenderViewModel> {
                                                           helpText:
                                                               'วันสุดท้าย',
                                                           onBackground:
-                                                              Colors.red,
-                                                          primary: Colors.red);
+                                                              CustomColors
+                                                                  .errorColor,
+                                                          primary: CustomColors
+                                                              .errorColor);
                                               if (datetimeEnd != null) {
                                                 controller.setEndDate(
                                                     date: datetimeEnd);
@@ -228,14 +220,14 @@ class AddNoteScreen extends GetView<CalenderViewModel> {
                                           final TimeOfDay? startTimeOfDay =
                                               await CustomTimeOfDayCall.instance
                                                   .timeOfDay(
-                                                      themeColor: Colors.blue,
+                                                      themeColor: CustomColors
+                                                          .onBackground1Color,
                                                       initialTime: controller
                                                           .selectStartTime
                                                           .value,
                                                       helpText: 'เวลาเริ่ม',
                                                       context: context);
                                           if (startTimeOfDay != null) {
-                                            print(startTimeOfDay.toString());
                                             controller.setStartTime(
                                                 time: startTimeOfDay);
 
@@ -247,7 +239,8 @@ class AddNoteScreen extends GetView<CalenderViewModel> {
                                                 await CustomTimeOfDayCall
                                                     .instance
                                                     .timeOfDay(
-                                                        themeColor: Colors.red,
+                                                        themeColor: CustomColors
+                                                            .errorColor,
                                                         initialTime: controller
                                                             .selectStartTime
                                                             .value,
@@ -287,7 +280,7 @@ class AddNoteScreen extends GetView<CalenderViewModel> {
                               padding: EdgeInsets.only(top: 5),
                               child: Text(
                                 "กรุณาเลือกวันที่",
-                                style: TextStyle(color: Colors.red),
+                                style: CustomTextStyles.body4,
                               ),
                             )
                           : const SizedBox();
@@ -296,11 +289,7 @@ class AddNoteScreen extends GetView<CalenderViewModel> {
                   const SizedBox(height: 20),
                   const Text(
                     "โน๊ต",
-                    style: TextStyle(
-                        height: 1.5,
-                        fontSize: 14,
-                        color: Color(0xff1a6cae),
-                        fontWeight: FontWeight.bold),
+                    style: CustomTextStyles.title3,
                   ),
                   TextFiledFormDetails(
                     onChanged: (String value) {

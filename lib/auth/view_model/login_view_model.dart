@@ -32,6 +32,7 @@ class LoginViewModel extends GetxController {
     if (textEmail.value.isNotEmpty) {
       validEmail.value = false;
     } else {
+      resError.value = ErrorModelLogin(status: 9, message: '');
       validEmail.value = true;
     }
   }
@@ -41,6 +42,7 @@ class LoginViewModel extends GetxController {
     if (textPassword.value.isNotEmpty) {
       validPass.value = false;
     } else {
+      resError.value = ErrorModelLogin(status: 9, message: '');
       validPass.value = true;
     }
   }
@@ -58,9 +60,6 @@ class LoginViewModel extends GetxController {
   }
 
   void login({required BuildContext context}) async {
-    //  var passConvert = int.parse(textPassword.value);
-    print(textEmail.value);
-    print(textPassword.value);
     final res = await LoginService.instance.repoLogin(
         requestModel: RequestModel(
             username: textEmail.value, password: textPassword.value),

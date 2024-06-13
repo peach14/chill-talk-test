@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:chill_talk_test/base/theme/custom_text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -27,8 +28,6 @@ class _DetailCalenderScreenState extends State<DetailCalenderScreen> {
     } else {
       log("Nodata 'Extra' in datail_calender_screen");
     }
-    print(">>>>>>>>>>>type>>>>>>>>>>>>${data?.type.runtimeType}");
-    print(">>>>>>>>>>>title>>>>>>>>>>>>${data?.title}");
     return Scaffold(
       appBar: AppBar(
         leading: InkWell(
@@ -38,8 +37,8 @@ class _DetailCalenderScreenState extends State<DetailCalenderScreen> {
             },
             child: Image.asset(IconPhat.backButton)),
         title: data!.type.isEmpty
-            ? Text(data.title, style: const TextStyle(fontSize: 20))
-            : Text(data.type, style: const TextStyle(fontSize: 20)),
+            ? Text(data.title, style: CustomTextStyles.header)
+            : Text(data.type, style: CustomTextStyles.header),
       ),
       body: Container(
         padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 32),
@@ -53,8 +52,7 @@ class _DetailCalenderScreenState extends State<DetailCalenderScreen> {
                 if (data.lastDate.isEmpty)
                   Text(
                     data.date,
-                    style: const TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.w400),
+                    style: CustomTextStyles.body8,
                   ),
                 if (data.lastDate.isNotEmpty)
                   Column(
@@ -63,8 +61,7 @@ class _DetailCalenderScreenState extends State<DetailCalenderScreen> {
                       data.date == data.lastDate
                           ? Text(
                               data.date,
-                              style: const TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.w400),
+                              style: CustomTextStyles.body,
                             )
                           : Text(
                               "${data.date} -",
@@ -78,9 +75,7 @@ class _DetailCalenderScreenState extends State<DetailCalenderScreen> {
                                 const SizedBox(height: 20),
                                 Text(
                                   data.lastDate,
-                                  style: const TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w400),
+                                  style: CustomTextStyles.body,
                                 ),
                               ],
                             ),
@@ -94,20 +89,17 @@ class _DetailCalenderScreenState extends State<DetailCalenderScreen> {
                         if (data.firstTime.isNotEmpty)
                           Text(
                             data.firstTime,
-                            style: const TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.w400),
+                            style: CustomTextStyles.body,
                           ),
                         if (data.lastTime.isNotEmpty)
                           const Text(
                             "ถึง",
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.w400),
+                            style: CustomTextStyles.body9,
                           ),
                         if (data.lastTime.isNotEmpty)
                           Text(
                             data.lastTime,
-                            style: const TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.w400),
+                            style: CustomTextStyles.body,
                           ),
                       ],
                     ),
@@ -120,25 +112,14 @@ class _DetailCalenderScreenState extends State<DetailCalenderScreen> {
             ),
             const Text(
               "นัดหมาย",
-              style: TextStyle(
-                  color: Color(0xff1a6cae),
-                  fontSize: 20,
-                  fontWeight: FontWeight.w400),
+              style: CustomTextStyles.body10,
             ),
             const SizedBox(
               height: 8,
             ),
             if (data.type.isNotEmpty && data.title.isNotEmpty)
-              Text("หัวข้อ  ${data.title}",
-                  style: TextStyle(
-                      color: Colors.grey.shade700,
-                      fontSize: 15,
-                      fontWeight: FontWeight.w400)),
-            Text(data.note,
-                style: TextStyle(
-                    color: Colors.grey.shade500,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400))
+              Text("หัวข้อ  ${data.title}", style: CustomTextStyles.body11),
+            Text(data.note, style: CustomTextStyles.body12)
           ],
         ),
       ),

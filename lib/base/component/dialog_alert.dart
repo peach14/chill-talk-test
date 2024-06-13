@@ -1,4 +1,7 @@
+import 'package:chill_talk_test/base/theme/custom_colors.dart';
 import 'package:flutter/material.dart';
+
+import '../theme/custom_text_styles.dart';
 
 Future<dynamic> dialogAlert({
   required BuildContext context,
@@ -40,11 +43,7 @@ Future<dynamic> dialogAlert({
               Text(
                 alertTitle,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.blue,
-                ),
+                style: CustomTextStyles.body2,
               ),
             }
           ],
@@ -64,7 +63,7 @@ Future<dynamic> dialogAlert({
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 5),
             child: Material(
-              color: colorButton ?? Colors.green,
+              color: colorButton ?? CustomColors.text4Color,
               borderRadius: BorderRadius.circular(32),
               elevation: 4,
               child: InkWell(
@@ -76,11 +75,7 @@ Future<dynamic> dialogAlert({
                   alignment: Alignment.center,
                   child: const Text(
                     "ปิด",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.white,
-                    ),
+                    style: CustomTextStyles.body3,
                   ),
                 ),
               ),

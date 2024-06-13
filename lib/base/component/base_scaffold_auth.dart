@@ -1,3 +1,4 @@
+import 'package:chill_talk_test/base/theme/custom_colors.dart';
 import 'package:flutter/material.dart';
 
 import '../utils/constants/asset_phat.dart';
@@ -12,7 +13,7 @@ class BaseScaffoldAuth extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          color: Colors.white,
+          color: CustomColors.onBackgroundColor,
           image: DecorationImage(
               alignment: Alignment.bottomRight,
               image: AssetImage(IconPhat.group))),

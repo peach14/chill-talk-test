@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:chill_talk_test/base/theme/custom_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -92,10 +93,11 @@ class RecordWorkViewModel extends GetxController {
       barrierColor: Colors.transparent,
       barrierDismissible: false,
       context: context,
-      builder: (context) => Center(
+      builder: (context) => const Center(
         child: CircularProgressIndicator(
-          color: const Color(0xff1a6cae),
-          backgroundColor: Colors.grey.shade400, // Corrected "gray" to "grey"
+          color: CustomColors.primaryColor,
+          backgroundColor:
+              CustomColors.borderColor2, // Corrected "gray" to "grey"
         ),
       ),
     );
@@ -121,7 +123,7 @@ class RecordWorkViewModel extends GetxController {
     if (response.status == 1) {
       // ignore: use_build_context_synchronously
       dialogAlert(
-        colorButton: const Color(0xff1a6cae),
+        colorButton: CustomColors.primaryColor,
         context: context,
         content: Text(response.message),
         onTap: () {
@@ -131,7 +133,7 @@ class RecordWorkViewModel extends GetxController {
     } else {
       // ignore: use_build_context_synchronously
       dialogAlert(
-        colorButton: const Color(0xff1a6cae),
+        colorButton: CustomColors.primaryColor,
         context: context,
         content: Text(response.message),
         onTap: () {

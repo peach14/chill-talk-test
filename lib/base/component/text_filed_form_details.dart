@@ -1,3 +1,4 @@
+import 'package:chill_talk_test/base/theme/custom_colors.dart';
 import 'package:flutter/material.dart';
 
 class TextFiledFormDetails extends StatelessWidget {
@@ -15,22 +16,22 @@ class TextFiledFormDetails extends StatelessWidget {
         maxLines: null,
         textAlignVertical: TextAlignVertical.top, // align text to the top
         clipBehavior: Clip.antiAlias,
-        decoration: InputDecoration(
-          contentPadding: const EdgeInsets.only(left: 8, top: 8, bottom: 99),
+        decoration: const InputDecoration(
+          contentPadding: EdgeInsets.only(left: 8, top: 8, bottom: 99),
           filled: true,
-          fillColor: Colors.white38,
-          disabledBorder: const OutlineInputBorder(
+          fillColor: CustomColors.onBackground4Color,
+          disabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(12)),
-              borderSide: BorderSide(color: Colors.white38)),
+              borderSide: BorderSide(color: CustomColors.onBackground4Color)),
           enabledBorder: OutlineInputBorder(
-              borderRadius: const BorderRadius.all(Radius.circular(12)),
-              borderSide: BorderSide(color: Colors.grey.shade400)),
-          focusedBorder: const OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(12)),
-              borderSide: BorderSide(color: Colors.green)),
-          border: const OutlineInputBorder(
+              borderSide: BorderSide(color: CustomColors.borderColor2)),
+          focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(12)),
-              borderSide: BorderSide(color: Color(0xff1a6cae))),
+              borderSide: BorderSide(color: CustomColors.primaryColor)),
+          border: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(12)),
+              borderSide: BorderSide(color: CustomColors.primaryColor)),
           // isDense: true,
         ));
   }

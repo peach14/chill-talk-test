@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:cell_calendar/cell_calendar.dart';
+import 'package:chill_talk_test/base/theme/custom_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
@@ -76,7 +77,7 @@ class DetailViewModel extends GetxController {
 
       dialogAlert(
         context: context,
-        colorButton: Colors.red,
+        colorButton: CustomColors.errorColor,
         content: const Text("ไม่มีนัดหมาย"),
         titleIcon: Text(dataDate),
         onTap: () {

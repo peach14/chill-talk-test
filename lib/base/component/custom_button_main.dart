@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../theme/custom_text_styles.dart';
+
 class CustomIconButtonMain extends StatelessWidget {
   const CustomIconButtonMain({
     super.key,
@@ -24,10 +26,7 @@ class CustomIconButtonMain extends StatelessWidget {
             ),
             Text(
               text,
-              style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black54),
+              style: CustomTextStyles.body,
             )
           ],
         ),

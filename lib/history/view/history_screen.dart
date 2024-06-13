@@ -1,8 +1,10 @@
+import 'package:chill_talk_test/base/theme/custom_text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../base/config/routing/route_path.dart';
+import '../../base/theme/custom_colors.dart';
 import '../../base/utils/constants/asset_phat.dart';
 import '../view_model/history_view_model.dart';
 
@@ -32,14 +34,14 @@ class _HistoryScreenState extends State<HistoryScreen> {
           builder: (controller) {
             return controller.dateIsToday.isEmpty &&
                     controller.showGroupedData.isEmpty
-                ? Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 40),
+                ? const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 40),
                     child: Align(
                       alignment: Alignment.topCenter,
                       child: CircularProgressIndicator(
-                        color: const Color(0xff1a6cae),
-                        backgroundColor:
-                            Colors.grey.shade400, // Corrected "gray" to "grey"
+                        color: CustomColors.primaryColor,
+                        backgroundColor: CustomColors
+                            .borderColor2, // Corrected "gray" to "grey"
                       ),
                     ),
                   )
@@ -127,96 +129,68 @@ class _HistoryScreenState extends State<HistoryScreen> {
                         padding: const EdgeInsets.symmetric(vertical: 8),
                         decoration: const BoxDecoration(
                             border: Border(
-                                bottom:
-                                    BorderSide(color: Colors.grey, width: 0))),
+                                bottom: BorderSide(
+                                    color: CustomColors.text3Color, width: 0))),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
                               formattedDate,
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w400, fontSize: 14),
+                              style: CustomTextStyles.body13,
                             ),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 if (lateMorningTime != null)
                                   Text(
-                                    "เข้า(เช้า) : ${lateMorningTime} น.",
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 14,
-                                        color: Color(0xfff40201)),
+                                    "เข้า(เช้า) : $lateMorningTime น.",
+                                    style: CustomTextStyles.body14,
                                   ),
                                 if (morningTime != null)
                                   Text(
-                                    "เข้า(เช้า) : ${morningTime} น.",
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 14,
-                                        color: Colors.green),
+                                    "เข้า(เช้า) : $morningTime น.",
+                                    style: CustomTextStyles.body15,
                                   ),
                                 if (lateMorningTime == null &&
                                     morningTime == null)
                                   const Text(
                                     "เข้า(เช้า) : -",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 14,
-                                        color: Color(0xffBDBDBD)),
+                                    style: CustomTextStyles.body16,
                                   ),
                                 if (afternoonTime != null)
                                   Text(
                                     "เข้า(บ่าย) : $afternoonTime น.",
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 14,
-                                        color: Colors.green),
+                                    style: CustomTextStyles.body15,
                                   ),
                                 if (lateAfternoonTime != null)
                                   Text(
                                     "เข้า(บ่าย) : $lateAfternoonTime น.",
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 14,
-                                        color: Color(0xfff40201)),
+                                    style: CustomTextStyles.body14,
                                   ),
                                 if (lateAfternoonTime == null &&
                                     afternoonTime == null)
                                   const Text(
                                     "เข้า(บ่าย) : -",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 14,
-                                        color: Color(0xffBDBDBD)),
+                                    style: CustomTextStyles.body16,
                                   ),
                                 //   eveningTime
                                 //  lateEveningTime
                                 if (eveningTime != null)
                                   Text(
                                     "ออก : $eveningTime น.",
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 14,
-                                        color: Colors.blue),
+                                    style: CustomTextStyles.body17,
                                   ),
                                 if (lateEveningTime != null)
                                   Text(
                                     "ออก : $lateEveningTime น.",
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 14,
-                                        color: Color(0xfff40201)),
+                                    style: CustomTextStyles.body14,
                                   ),
                                 if (lateEveningTime == null &&
                                     eveningTime == null)
                                   const Text(
                                     "ออก : -",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 14,
-                                        color: Color(0xffBDBDBD)),
+                                    style: CustomTextStyles.body16,
                                   ),
                               ],
                             )

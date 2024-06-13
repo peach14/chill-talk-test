@@ -1,11 +1,13 @@
 import 'dart:developer';
 
 import 'package:cell_calendar/cell_calendar.dart';
+import 'package:chill_talk_test/base/theme/custom_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
+import '../../base/theme/custom_text_styles.dart';
 import '../service/data_calender.dart';
 
 class CalenderViewModel extends GetxController {
@@ -190,7 +192,7 @@ class CalenderViewModel extends GetxController {
           lastDate: element.lastDate,
           eventName: element.type ?? 'NODATA ONE',
           eventDate: parsedDate,
-          eventBackgroundColor: Colors.blueAccent,
+          eventBackgroundColor: CustomColors.onBackground3Color,
           eventTextStyle: eventTextStyle,
         ));
       } else if (element.type!.isEmpty && element.title!.isNotEmpty) {
@@ -201,7 +203,7 @@ class CalenderViewModel extends GetxController {
           lastDate: element.lastDate,
           eventName: element.title ?? 'NODATA TWO',
           eventDate: parsedDate,
-          eventBackgroundColor: Colors.amberAccent,
+          eventBackgroundColor: CustomColors.onBackground2Color,
           eventTextStyle: eventTextStyle,
         ));
       } else if (element.type!.isNotEmpty && element.title!.isNotEmpty) {
@@ -212,7 +214,7 @@ class CalenderViewModel extends GetxController {
           lastDate: element.lastDate,
           eventName: element.type ?? 'NOData',
           eventDate: parsedDate,
-          eventBackgroundColor: Colors.blueAccent,
+          eventBackgroundColor: CustomColors.onBackground3Color,
           eventTextStyle: eventTextStyle,
         ));
         sampleEvents.add(CalendarEvent(
@@ -222,7 +224,7 @@ class CalenderViewModel extends GetxController {
           lastDate: element.lastDate,
           eventName: element.title ?? 'no DATA',
           eventDate: parsedDate,
-          eventBackgroundColor: Colors.amberAccent,
+          eventBackgroundColor: CustomColors.onBackground2Color,
           eventTextStyle: eventTextStyle,
         ));
       } else {
@@ -234,8 +236,7 @@ class CalenderViewModel extends GetxController {
   }
 
   final cellCalendarPageController = CellCalendarPageController();
-  static const eventTextStyle =
-      TextStyle(fontSize: 9, color: Colors.white, fontWeight: FontWeight.w400);
+  static const eventTextStyle = CustomTextStyles.body6;
 
   List<CalendarEvent> sampleEvents = [];
 
@@ -282,12 +283,9 @@ class CalenderViewModel extends GetxController {
 
   void addEvenTypeText() {
     print("kkkkkkkkkkkkkkkkkkkkkk");
-    print(">>>>>>>>>>>>>>>>>>>${startDates}");
-    print(">>>>>>>>>>>>>>>>>>>${endDates}");
     for (DateTime date = startDates;
         date.isBefore(endDates.add(const Duration(days: 1)));
         date = date.add(const Duration(days: 1))) {
-      print("010110101100110101011101010");
       final postData = calenderTestModelToJson(CalenderTestModel(
           type: typeText,
           title: '',

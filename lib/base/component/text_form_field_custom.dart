@@ -1,9 +1,11 @@
 import 'dart:developer';
 
+import 'package:chill_talk_test/base/theme/custom_text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../auth/view_model/login_view_model.dart';
+import '../theme/custom_colors.dart';
 
 enum FormType { email, password, addNote }
 
@@ -76,12 +78,7 @@ class TextFormFieldCustom extends GetView<LoginViewModel> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               label != null
-                  ? Text(label ?? '',
-                      style: const TextStyle(
-                          height: 1.5,
-                          fontSize: 15,
-                          color: Color(0xff1a6cae),
-                          fontWeight: FontWeight.bold))
+                  ? Text(label ?? '', style: CustomTextStyles.title1)
                   : const SizedBox.shrink(),
               SizedBox(
                 height: height,
@@ -121,7 +118,7 @@ class TextFormFieldCustom extends GetView<LoginViewModel> {
                           padding: EdgeInsets.only(top: 3),
                           child: Text(
                             "กรุณากรอกข้อมูล",
-                            style: TextStyle(color: Colors.red),
+                            style: CustomTextStyles.body4,
                           ),
                         )
                       : const SizedBox.shrink()
@@ -132,23 +129,11 @@ class TextFormFieldCustom extends GetView<LoginViewModel> {
                           padding: EdgeInsets.only(top: 3),
                           child: Text(
                             "กรุณากรอกข้อมูล",
-                            style: TextStyle(color: Colors.red),
+                            style: CustomTextStyles.body4,
                           ),
                         )
                       : const SizedBox.shrink()
                   : const SizedBox.shrink(),
-              if (field.hasError)
-                Padding(
-                  padding: const EdgeInsets.only(top: 3),
-                  child: Text(
-                    field.errorText ?? '',
-                    style: const TextStyle(
-                      color: Colors.red,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                ),
               FormType.addNote == formType
                   ? const SizedBox.shrink()
                   : const SizedBox(height: 32)
@@ -175,14 +160,17 @@ class TextFormFieldCustom extends GetView<LoginViewModel> {
             borderSide: BorderSide(
                 width: 1.3,
                 color: value || controller.resError.value.status == 0
-                    ? Colors.red
-                    : broderColor ?? const Color(0xff1a6cae))),
+                    ? CustomColors.errorColor
+                    : broderColor ?? CustomColors.primaryColor)),
         focusedBorder: OutlineInputBorder(
             borderRadius: const BorderRadius.all(Radius.circular(12)),
-            borderSide: BorderSide(color: value ? Colors.red : Colors.green)),
+            borderSide: BorderSide(
+                color: value
+                    ? CustomColors.errorColor
+                    : CustomColors.primaryColor)),
         border: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(12)),
-            borderSide: BorderSide(color: Color(0xff1a6cae))),
+            borderSide: BorderSide(color: CustomColors.primaryColor)),
         hintStyle: hintStyle,
         isDense: true,
         contentPadding: EdgeInsets.fromLTRB(
@@ -207,14 +195,6 @@ class TextFormFieldCustom extends GetView<LoginViewModel> {
                 ),
               )
             : null,
-        // suffixIconConstraints: BoxConstraints(
-        //   minWidth: 24.spMin,
-        //   maxWidth: 60.spMax,
-        // ),
-        // prefixIconConstraints: BoxConstraints(
-        //   minWidth: 24.spMin,
-        //   maxWidth: 60.spMax,
-        // ),
         suffixIcon: isPassword == true
             ? IconButton(
                 onPressed: onPressed ??
