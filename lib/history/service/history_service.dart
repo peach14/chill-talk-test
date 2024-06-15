@@ -30,7 +30,9 @@ class HistoryService {
     final localResp = responseModelLoginFromJson(getRespLogin!);
     // ignore: use_build_context_synchronously
     final res = await Get.find<BaseApiService>().getRequest(
-        url: localResp.id == '112' ? '1199900082840' : localResp.userCode,
+        url:
+            // localResp.id == '112' ? '1199900082840' :
+            localResp.userCode,
         context: context);
     //context.pop();
     return res.toString();

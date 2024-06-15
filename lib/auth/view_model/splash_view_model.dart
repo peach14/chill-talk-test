@@ -18,6 +18,7 @@ class SplashViewModel extends GetxController {
     ErrorModelLogin? resError;
     ResponseModelLogin? localResp;
     ResponseModelLogin? respLogin;
+
     final getRespLogin =
         await LocalStorageSecureService.instance.read(kResponseLogin);
     if (getRespLogin != null) {
@@ -41,35 +42,41 @@ class SplashViewModel extends GetxController {
         requestModel:
             RequestModel(username: localResp?.email ?? '', password: decoded),
         context: context);
-    try {
-      respLogin = responseModelLoginFromJson(res);
-    } catch (e) {
-      resError = errorModelLoginFromJson(res);
-    }
-
-// check Status user
-    final getToken = await LocalStorageSecureService.instance.getToken();
-    // ignore: unnecessary_null_comparison
-    if (resError != null) {
-      int statusLocal = int.parse(getToken ?? '7');
-
-      if (statusLocal != resError.status) {
-        // ignore: use_build_context_synchronously
-        context.go(kNevLogin);
-      } else {
-        // ignore: use_build_context_synchronously
-        context.go(kNevMain);
+    print(res.runtimeType);
+    print(res);
+    if (res != 'null') {
+      try {
+        respLogin = responseModelLoginFromJson(res);
+      } catch (e) {
+        resError = errorModelLoginFromJson(res);
       }
+      // check Status user
+      final getToken = await LocalStorageSecureService.instance.getToken();
+      // ignore: unnecessary_null_comparison
+      if (resError != null) {
+        int statusLocal = int.parse(getToken ?? '7');
+
+        if (statusLocal != resError.status) {
+          // ignore: use_build_context_synchronously
+          context.go(kNevLogin);
+        } else {
+          // ignore: use_build_context_synchronously
+          context.go(kNevMain);
+        }
+      } else {
+        int statusLocal = int.parse(getToken ?? '7');
+
+        if (statusLocal == respLogin?.status) {
+          // ignore: use_build_context_synchronously
+          context.go(kNevMain);
+        } else {
+          // ignore: use_build_context_synchronously
+          context.go(kNevLogin);
+        }
+      }
+      print("111111111111111111111111111");
     } else {
-      int statusLocal = int.parse(getToken ?? '7');
-
-      if (statusLocal == respLogin?.status) {
-        // ignore: use_build_context_synchronously
-        context.go(kNevMain);
-      } else {
-        // ignore: use_build_context_synchronously
-        context.go(kNevLogin);
-      }
+      print("2222222222222222222222222");
     }
   }
 }

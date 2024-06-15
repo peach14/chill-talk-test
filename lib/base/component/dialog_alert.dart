@@ -43,7 +43,7 @@ Future<dynamic> dialogAlert({
               Text(
                 alertTitle,
                 textAlign: TextAlign.center,
-                style: CustomTextStyles.body2,
+                style: CustomTextStyles.body9,
               ),
             }
           ],

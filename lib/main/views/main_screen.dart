@@ -50,7 +50,7 @@ class MainScreen extends GetView<RecordWorkViewModel> {
                       },
                       icon: const Icon(
                         Icons.power_settings_new,
-                        color: CustomColors.errorColor,
+                        color: CustomColors.onBackgroundColor,
                       )),
                 ),
                 const Spacer()
@@ -161,40 +161,49 @@ class MainScreen extends GetView<RecordWorkViewModel> {
         child: Column(
           children: [
             const Spacer(),
-            CustomIconButtonMain(
-              onTap: null,
-              //     () {
-              //   context.pushReplacement(kNevCalender);
-              // },
-              text: 'ปฎิทิน',
-              icon: IconPhat.calendarToday,
-            ),
-            CustomIconButtonMain(
-              onTap: null,
-              //     () {
-              //   context.push(kNevAddNote);
-              // },
-              text: 'แจ้งลา',
-              icon: IconPhat.frame_32,
-            ),
             GetBuilder<HistoryViewModel>(
                 builder: (controller) => CustomIconButtonMain(
                       onTap: () {
                         controller.loadDataHistory(context);
-                        context.pushReplacement(kNevHistory);
+                        context.push(kNevHistory);
                       },
                       text: 'ประวัติ',
                       icon: IconPhat.frame_32_2,
                     )),
-            CustomIconButtonMain(
-              onTap: null,
-              //     () {
-              //   context.pushReplacement(kNevReportProBlem);
-              // },
-              text: 'แจ้งปัญหา',
-              icon: (IconPhat.nextWeek),
-            ),
-            const Spacer(flex: 2),
+            // CustomIconButtonMain(
+            //   onTap: null,
+            //   //     () {
+            //   //   context.pushReplacement(kNevCalender);
+            //   // },
+            //   text: 'ปฎิทิน',
+            //   icon: IconPhat.calendarToday,
+            // ),
+            // CustomIconButtonMain(
+            //   onTap: null,
+            //   //     () {
+            //   //   context.push(kNevAddNote);
+            //   // },
+            //   text: 'แจ้งลา',
+            //   icon: IconPhat.frame_32,
+            // ),
+            // GetBuilder<HistoryViewModel>(
+            //     builder: (controller) => CustomIconButtonMain(
+            //           onTap: () {
+            //             controller.loadDataHistory(context);
+            //             context.push(kNevHistory);
+            //           },
+            //           text: 'ประวัติ',
+            //           icon: IconPhat.frame_32_2,
+            //         )),
+            // CustomIconButtonMain(
+            //   onTap: null,
+            //   //     () {
+            //   //   context.pushReplacement(kNevReportProBlem);
+            //   // },
+            //   text: 'แจ้งปัญหา',
+            //   icon: (IconPhat.nextWeek),
+            // ),
+            const Spacer(flex: 3),
           ],
         ),
       ),

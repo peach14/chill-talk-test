@@ -1,15 +1,18 @@
 import 'dart:async';
 
 import 'package:chill_talk_test/base/theme/custom_colors.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:ntp/ntp.dart';
 
 import '../../auth/model/response_login_model.dart';
 import '../../base/component/dialog_alert.dart';
 import '../../base/service/local_storage/secure_storage_service.dart';
+import '../../base/utils/constants/asset_phat.dart';
 import '../../base/utils/constants/constants.dart';
 import '../model/erroe_model_record.dart';
 import '../model/request_record_model.dart';
@@ -27,13 +30,13 @@ class RecordWorkViewModel extends GetxController {
   void onInit() async {
     _recordAttendWork();
     _recordOutWork();
-    Timer.periodic(const Duration(seconds: 1), (_) {
-      time.value = DateFormat('h:mm a').format(DateTime.now());
+    Timer.periodic(const Duration(seconds: 1), (_) async {
+      time.value = DateFormat('h:mm a').format(await NTP.now());
       _recordAttendWork();
       _recordOutWork();
     });
     final dateFormat = DateFormat('EEEE d MMMM y', 'th');
-    final formattedDate = dateFormat.format(DateTime.now());
+    final formattedDate = dateFormat.format(await NTP.now());
     final buddhistYear = DateTime.now().year + 543;
     dates.value = formattedDate.replaceFirst(
         DateTime.now().year.toString(), buddhistYear.toString());
@@ -41,8 +44,8 @@ class RecordWorkViewModel extends GetxController {
     super.onInit();
   }
 
-  void _recordAttendWork() {
-    final now = DateTime.now();
+  void _recordAttendWork() async {
+    final now = await NTP.now();
     final currentTime = DateFormat('HH:mm').format(now);
     final morningStart = DateTime(0, 1, 1, 05, 00);
     final morningEnd = DateTime(0, 1, 1, 13, 31);
@@ -62,8 +65,8 @@ class RecordWorkViewModel extends GetxController {
   }
 
   final disableOutWork = true.obs;
-  void _recordOutWork() {
-    final now = DateTime.now();
+  void _recordOutWork() async {
+    final now = await NTP.now();
     final currentTime = DateFormat('HH:mm').format(now);
     final eveningStart = DateTime(0, 1, 1, 17, 00);
     final eveningEnd = DateTime(0, 1, 1, 19, 30);
@@ -89,55 +92,94 @@ class RecordWorkViewModel extends GetxController {
   }
 
   void getCurrentLocation({required BuildContext context}) async {
-    showDialog(
-      barrierColor: Colors.transparent,
-      barrierDismissible: false,
-      context: context,
-      builder: (context) => const Center(
-        child: CircularProgressIndicator(
-          color: CustomColors.primaryColor,
-          backgroundColor:
-              CustomColors.borderColor2, // Corrected "gray" to "grey"
-        ),
-      ),
-    );
+    var connectivityResult = await Connectivity().checkConnectivity();
 
-    Position position = await permissionLocation();
-    // ignore: use_build_context_synchronously
-    context.pop();
-
-    final getRespLogin =
-        await LocalStorageSecureService.instance.read(kResponseLogin);
-    final respLogin = responseModelLoginFromJson(getRespLogin ?? '');
-    responseModelLogin = respLogin;
-    // ignore: use_build_context_synchronously
-    final res = await RecordService.instance.repoRecordWork(
-        requestModel: RespModelRecordWork(
-            centerCode: respLogin.centerCode,
-            userCode: respLogin.userCode,
-            latitude: position.latitude.toString(),
-            longitude: position.longitude.toString()),
-        context: context);
-
-    final response = errorModelRecordFromJson(res);
-    if (response.status == 1) {
+    if (connectivityResult != ConnectivityResult.none) {
       // ignore: use_build_context_synchronously
-      dialogAlert(
-        colorButton: CustomColors.primaryColor,
+      showDialog(
+        barrierColor: Colors.transparent,
+        barrierDismissible: false,
         context: context,
-        content: Text(response.message),
-        onTap: () {
-          context.pop();
-        },
+        builder: (context) => const Center(
+          child: CircularProgressIndicator(
+            color: CustomColors.primaryColor,
+            backgroundColor:
+                CustomColors.borderColor2, // Corrected "gray" to "grey"
+          ),
+        ),
       );
+
+      Position position = await permissionLocation();
+      // ignore: use_build_context_synchronously
+      context.pop();
+
+      final getRespLogin =
+          await LocalStorageSecureService.instance.read(kResponseLogin);
+      final respLogin = responseModelLoginFromJson(getRespLogin ?? '');
+      responseModelLogin = respLogin;
+      // ignore: use_build_context_synchronously
+      var res = await RecordService.instance.repoRecordWork(
+          requestModel: RespModelRecordWork(
+              centerCode: respLogin.centerCode,
+              userCode: respLogin.userCode,
+              latitude: position.latitude.toString(),
+              longitude: position.longitude.toString()),
+          context: context);
+      print(res);
+      final response = errorModelRecordFromJson(res);
+      switch (response.message) {
+        case "Not Work Time":
+          response.message = "ขณะนี้ไม่ใช่ เวลา ทำงาน";
+          break;
+        case "Good jobs":
+          response.message = "ทำได้ ดีมาก";
+          break;
+        case "Your Late":
+          response.message = "คุณ มาสาย";
+          break;
+        case "Have Bad News":
+          response.message = "คุณมาสายมาก มี ข่าว ร้าย";
+          break;
+      }
+
+      if (response.status == 1) {
+        // ignore: use_build_context_synchronously
+        dialogAlert(
+          titleIcon: Image.asset(
+            ImagePhat.logoChillTalk,
+            scale: 1.5,
+          ),
+          colorButton: CustomColors.primaryColor,
+          context: context,
+          content: Text(response.message),
+          onTap: () {
+            context.pop();
+          },
+        );
+      } else {
+        // ignore: use_build_context_synchronously
+        dialogAlert(
+          titleIcon: Image.asset(
+            ImagePhat.logoChillTalk,
+            scale: 1.5,
+          ),
+          colorButton: CustomColors.primaryColor,
+          context: context,
+          content: Text(response.message),
+          onTap: () {
+            context.pop();
+          },
+        );
+      }
     } else {
       // ignore: use_build_context_synchronously
       dialogAlert(
-        colorButton: CustomColors.primaryColor,
         context: context,
-        content: Text(response.message),
+        colorButton: CustomColors.primaryColor,
+        content: const Text("ไม่พบ สัญญาณอินเตอร์เน็ต"),
         onTap: () {
           context.pop();
+          // Reset isDialogShown when dialog is dismissed
         },
       );
     }
