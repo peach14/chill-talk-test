@@ -204,7 +204,7 @@ class TextFormFieldCustom extends GetView<LoginViewModel> {
                 icon: iconSubmit ??
                     Icon(
                         size: 24,
-                        color: Colors.deepOrange,
+                        color: CustomColors.primaryColor,
                         controller.showPassword.value
                             ? Icons.visibility
                             : Icons.visibility_off))

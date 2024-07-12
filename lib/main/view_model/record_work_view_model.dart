@@ -1,17 +1,18 @@
 import 'dart:async';
 
-import 'package:chill_talk_test/base/theme/custom_colors.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import 'package:ntp/ntp.dart';
+import 'package:responsive_framework/responsive_wrapper.dart';
 
 import '../../auth/model/response_login_model.dart';
 import '../../base/component/dialog_alert.dart';
+import '../../base/config/routing/route_path.dart';
 import '../../base/service/local_storage/secure_storage_service.dart';
+import '../../base/theme/custom_colors.dart';
 import '../../base/utils/constants/asset_phat.dart';
 import '../../base/utils/constants/constants.dart';
 import '../model/erroe_model_record.dart';
@@ -31,12 +32,12 @@ class RecordWorkViewModel extends GetxController {
     _recordAttendWork();
     _recordOutWork();
     Timer.periodic(const Duration(seconds: 1), (_) async {
-      time.value = DateFormat('h:mm a').format(await NTP.now());
+      time.value = DateFormat('h:mm a').format(DateTime.now());
       _recordAttendWork();
       _recordOutWork();
     });
     final dateFormat = DateFormat('EEEE d MMMM y', 'th');
-    final formattedDate = dateFormat.format(await NTP.now());
+    final formattedDate = dateFormat.format(DateTime.now());
     final buddhistYear = DateTime.now().year + 543;
     dates.value = formattedDate.replaceFirst(
         DateTime.now().year.toString(), buddhistYear.toString());
@@ -45,10 +46,10 @@ class RecordWorkViewModel extends GetxController {
   }
 
   void _recordAttendWork() async {
-    final now = await NTP.now();
+    final now = DateTime.now();
     final currentTime = DateFormat('HH:mm').format(now);
     final morningStart = DateTime(0, 1, 1, 05, 00);
-    final morningEnd = DateTime(0, 1, 1, 13, 31);
+    final morningEnd = DateTime(0, 1, 1, 17, 00);
     // final middayStart = DateTime(0, 1, 1, 12, 00);
     // final middayEnd = DateTime(0, 1, 1, 13, 30);
 
@@ -66,7 +67,7 @@ class RecordWorkViewModel extends GetxController {
 
   final disableOutWork = true.obs;
   void _recordOutWork() async {
-    final now = await NTP.now();
+    final now = DateTime.now();
     final currentTime = DateFormat('HH:mm').format(now);
     final eveningStart = DateTime(0, 1, 1, 17, 00);
     final eveningEnd = DateTime(0, 1, 1, 19, 30);
@@ -143,11 +144,25 @@ class RecordWorkViewModel extends GetxController {
       }
 
       if (response.status == 1) {
+        // Get.dialog(
+        //   AlertDialog(
+        //     title: Text("Alert"),
+        //     content: Text("Your message here"),
+        //     actions: [
+        //       TextButton(
+        //         onPressed: () {
+        //           Get.back(); // Close the dialog
+        //         },
+        //         child: Text("OK"),
+        //       ),
+        //     ],
+        //   ),
+        // );
         // ignore: use_build_context_synchronously
         dialogAlert(
           titleIcon: Image.asset(
             ImagePhat.logoChillTalk,
-            scale: 1.5,
+            scale: 2,
           ),
           colorButton: CustomColors.primaryColor,
           context: context,
@@ -167,7 +182,7 @@ class RecordWorkViewModel extends GetxController {
           context: context,
           content: Text(response.message),
           onTap: () {
-            context.pop();
+            context.pushReplacement(kNevMain);
           },
         );
       }
@@ -202,5 +217,21 @@ class RecordWorkViewModel extends GetxController {
     Position position = await permissionLocation();
 
     return position;
+  }
+
+  double resize(
+      {required double referenceFontSize,
+      required double screenWidth,
+      required BuildContext context}) {
+    final responsive = ResponsiveWrapper.of(context).isMobile;
+    if (responsive) {
+      double referenceWidth = 360; // Reference screen width in pixels
+      double screenWidth = MediaQuery.of(context).size.width;
+      double scalingFactor = referenceFontSize / referenceWidth;
+      double dynamicFontSize = screenWidth * scalingFactor;
+      return dynamicFontSize;
+    } else {
+      return 0.0;
+    }
   }
 }

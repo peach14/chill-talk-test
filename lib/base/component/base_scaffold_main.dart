@@ -46,8 +46,8 @@ class BaseScaffoldMain extends StatelessWidget {
                 child: Row(
               children: [
                 const Spacer(),
-                bodyBottom,
-                //  const Spacer(flex: 14),
+                Expanded(flex: 20, child: bodyBottom),
+                const Spacer(flex: 1),
               ],
             ))
           ],

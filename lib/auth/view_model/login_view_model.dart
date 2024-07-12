@@ -87,6 +87,7 @@ class LoginViewModel extends GetxController {
         textEmail.value = '';
         textPassword.value = '';
         resError.value = ErrorModelLogin(status: 9, message: '');
+        // await NTP.now();
         // ignore: use_build_context_synchronously
         context.go(kNevMain);
       }

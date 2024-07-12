@@ -12,6 +12,8 @@ class CustomBottomHome extends StatelessWidget {
     this.onTap,
     this.borderColor,
     required this.disable,
+    required this.iconSize,
+    required this.fontSize,
   });
   final String icon;
   final String text;
@@ -19,6 +21,8 @@ class CustomBottomHome extends StatelessWidget {
   final Color? borderColor;
   final Color? textColor;
   final double? radius;
+  final double iconSize;
+  final double fontSize;
   final bool disable;
   final void Function()? onTap;
   @override
@@ -29,20 +33,23 @@ class CustomBottomHome extends StatelessWidget {
         side: BorderSide(
             width: 1.2,
             color: borderColor ??
-               CustomColors.primaryColor), // Define the border properties here
+                CustomColors.primaryColor), // Define the border properties here
       ),
-      color: color ??  CustomColors.primaryColor,
+      color: color ?? CustomColors.primaryColor,
       elevation: 5,
       child: InkWell(
         onTap: onTap,
         child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 45, horizontal: 45),
+          // constraints: BoxConstraints(maxHeight: 200, minHeight: 119),
+          //padding: const EdgeInsets.symmetric(vertical: 45),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 text,
                 style: TextStyle(
-                    color: textColor ??  CustomColors.onBackgroundColor,
+                    color: textColor ?? CustomColors.onBackgroundColor,
+                    fontSize: fontSize,
                     fontWeight: FontWeight.w600),
               ),
               SizedBox(
@@ -51,11 +58,13 @@ class CustomBottomHome extends StatelessWidget {
               disable == true
                   ? Image.asset(
                       icon,
+                      height: iconSize,
+                      width: iconSize,
                     )
                   : Icon(
                       Icons.lock_clock_outlined,
                       color: Colors.grey.shade500,
-                      size: 40,
+                      size: iconSize,
                     )
             ],
           ),

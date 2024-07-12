@@ -60,6 +60,7 @@ class SplashViewModel extends GetxController {
           // ignore: use_build_context_synchronously
           context.go(kNevLogin);
         } else {
+          //  await NTP.now();
           // ignore: use_build_context_synchronously
           context.go(kNevMain);
         }
@@ -67,6 +68,7 @@ class SplashViewModel extends GetxController {
         int statusLocal = int.parse(getToken ?? '7');
 
         if (statusLocal == respLogin?.status) {
+          //    await NTP.now();
           // ignore: use_build_context_synchronously
           context.go(kNevMain);
         } else {

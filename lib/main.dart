@@ -19,10 +19,10 @@ void main() {
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
   ));
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-  ]);
+  // SystemChrome.setPreferredOrientations([
+  //   DeviceOrientation.portraitUp,
+  //   DeviceOrientation.portraitDown,
+  // ]);
   initializeDateFormatting('th', null).then((_) {
     runApp(const MyApp.native());
   });
@@ -36,8 +36,8 @@ class MyApp extends GetView {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(AppRouterProvider());
-    final route = Get.find<AppRouterProvider>();
+    // Get.put(AppRouterProvider());
+    // final route = Get.find<AppRouterProvider>();
     return GetMaterialApp.router(
       initialBinding: AppBinding(),
       locale: const Locale('th', 'TH'),
@@ -48,19 +48,21 @@ class MyApp extends GetView {
       supportedLocales: const [
         Locale('th', 'TH'),
       ],
-      routeInformationParser: route.appRouter.routeInformationParser,
-      routerDelegate: route.appRouter.routerDelegate,
-      routeInformationProvider: route.appRouter.routeInformationProvider,
+      // routeInformationParser: appRouter.routeInformationParser,
+      // routerDelegate: appRouter.routerDelegate,
+      routeInformationParser: appRouter.routeInformationParser,
+      routerDelegate: appRouter.routerDelegate,
+      routeInformationProvider: appRouter.routeInformationProvider,
       builder: (context, widget) => ResponsiveWrapper.builder(
           BouncingScrollWrapper.builder(context, widget!),
           maxWidth: 1200,
-          minWidth: 375,
+          minWidth: 320,
           defaultScale: true,
           breakpoints: [
             // const ResponsiveBreakpoint.autoScale(600),
-            const ResponsiveBreakpoint.resize(375, name: MOBILE),
-            const ResponsiveBreakpoint.autoScale(800, name: TABLET),
-            const ResponsiveBreakpoint.autoScale(1000, name: TABLET),
+            const ResponsiveBreakpoint.resize(320, name: MOBILE),
+            const ResponsiveBreakpoint.autoScale(540, name: TABLET),
+            //    const ResponsiveBreakpoint.autoScale(1200, name: TABLET),
           ],
           background: Container(color: const Color(0xFFF5F5F5))),
       title: 'Flutter Demo',
