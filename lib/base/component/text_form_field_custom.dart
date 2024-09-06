@@ -1,11 +1,11 @@
 import 'dart:developer';
 
-import 'package:chill_talk_test/base/theme/custom_text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../auth/view_model/login_view_model.dart';
 import '../theme/custom_colors.dart';
+import 'cal_responsive.dart';
 
 enum FormType { email, password, addNote }
 
@@ -78,10 +78,16 @@ class TextFormFieldCustom extends GetView<LoginViewModel> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               label != null
-                  ? Text(label ?? '', style: CustomTextStyles.title1)
+                  ? Text(label ?? '',
+                      style: TextStyle(
+                          height: 1.5,
+                          fontSize:
+                              CalResponsive.instance.scaleWidth(context, 15),
+                          color: CustomColors.primaryColor,
+                          fontWeight: FontWeight.bold))
                   : const SizedBox.shrink(),
               SizedBox(
-                height: height,
+                height: CalResponsive.instance.scaleHeight(context, height!),
                 width: width,
                 child: TextFormField(
                   focusNode: focusNode,
@@ -114,22 +120,28 @@ class TextFormFieldCustom extends GetView<LoginViewModel> {
               ),
               FormType.email == formType
                   ? controller.validEmail.value
-                      ? const Padding(
+                      ? Padding(
                           padding: EdgeInsets.only(top: 3),
                           child: Text(
                             "กรุณากรอกข้อมูล",
-                            style: CustomTextStyles.body4,
+                            style: TextStyle(
+                                color: CustomColors.errorColor,
+                                fontSize: CalResponsive.instance
+                                    .scaleWidth(context, 12)),
                           ),
                         )
                       : const SizedBox.shrink()
                   : const SizedBox.shrink(),
               FormType.password == formType
                   ? controller.validPass.value
-                      ? const Padding(
+                      ? Padding(
                           padding: EdgeInsets.only(top: 3),
                           child: Text(
                             "กรุณากรอกข้อมูล",
-                            style: CustomTextStyles.body4,
+                            style: TextStyle(
+                                color: CustomColors.errorColor,
+                                fontSize: CalResponsive.instance
+                                    .scaleWidth(context, 12)),
                           ),
                         )
                       : const SizedBox.shrink()

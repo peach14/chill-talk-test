@@ -6,7 +6,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import 'package:responsive_framework/responsive_wrapper.dart';
 
 import '../../auth/model/response_login_model.dart';
 import '../../base/component/dialog_alert.dart';
@@ -49,7 +48,7 @@ class RecordWorkViewModel extends GetxController {
     final now = DateTime.now();
     final currentTime = DateFormat('HH:mm').format(now);
     final morningStart = DateTime(0, 1, 1, 05, 00);
-    final morningEnd = DateTime(0, 1, 1, 17, 00);
+    final morningEnd = DateTime(0, 1, 1, 13, 30);
     // final middayStart = DateTime(0, 1, 1, 12, 00);
     // final middayEnd = DateTime(0, 1, 1, 13, 30);
 
@@ -144,20 +143,22 @@ class RecordWorkViewModel extends GetxController {
       }
 
       if (response.status == 1) {
-        // Get.dialog(
-        //   AlertDialog(
-        //     title: Text("Alert"),
-        //     content: Text("Your message here"),
-        //     actions: [
-        //       TextButton(
-        //         onPressed: () {
-        //           Get.back(); // Close the dialog
-        //         },
-        //         child: Text("OK"),
-        //       ),
-        //     ],
-        //   ),
-        // );
+        //  WidgetsBinding.instance.addPostFrameCallback((_) {
+        //   Get.dialog(
+        //     AlertDialog(
+        //       title: Text("Title"),
+        //       content: Text("Your message here"),
+        //       actions: [
+        //         TextButton(
+        //           onPressed: () {
+        //             Get.back(); // Close the dialog
+        //           },
+        //           child: Text("OK"),
+        //         ),
+        //       ],
+        //     ),
+        //   );
+
         // ignore: use_build_context_synchronously
         dialogAlert(
           titleIcon: Image.asset(
@@ -171,6 +172,7 @@ class RecordWorkViewModel extends GetxController {
             context.pop();
           },
         );
+        // });
       } else {
         // ignore: use_build_context_synchronously
         dialogAlert(
@@ -219,19 +221,19 @@ class RecordWorkViewModel extends GetxController {
     return position;
   }
 
-  double resize(
-      {required double referenceFontSize,
-      required double screenWidth,
-      required BuildContext context}) {
-    final responsive = ResponsiveWrapper.of(context).isMobile;
-    if (responsive) {
-      double referenceWidth = 360; // Reference screen width in pixels
-      double screenWidth = MediaQuery.of(context).size.width;
-      double scalingFactor = referenceFontSize / referenceWidth;
-      double dynamicFontSize = screenWidth * scalingFactor;
-      return dynamicFontSize;
-    } else {
-      return 0.0;
-    }
-  }
+  // double resize(
+  //     {required double referenceFontSize,
+  //     required double screenWidth,
+  //     required BuildContext context}) {
+  //   final responsive = ResponsiveWrapper.of(context).isMobile;
+  //   if (responsive) {
+  //     double referenceWidth = 360; // Reference screen width in pixels
+  //     double screenWidth = MediaQuery.of(context).size.width;
+  //     double scalingFactor = referenceFontSize / referenceWidth;
+  //     double dynamicFontSize = screenWidth * scalingFactor;
+  //     return dynamicFontSize;
+  //   } else {
+  //     return 0.0;
+  //   }
+  // }
 }

@@ -14,6 +14,8 @@ class CustomBottomHome extends StatelessWidget {
     required this.disable,
     required this.iconSize,
     required this.fontSize,
+    required this.height,
+    required this.width,
   });
   final String icon;
   final String text;
@@ -23,6 +25,8 @@ class CustomBottomHome extends StatelessWidget {
   final double? radius;
   final double iconSize;
   final double fontSize;
+  final double height;
+  final double width;
   final bool disable;
   final void Function()? onTap;
   @override
@@ -42,6 +46,8 @@ class CustomBottomHome extends StatelessWidget {
         child: Container(
           // constraints: BoxConstraints(maxHeight: 200, minHeight: 119),
           //padding: const EdgeInsets.symmetric(vertical: 45),
+          height: height,
+          width: width,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

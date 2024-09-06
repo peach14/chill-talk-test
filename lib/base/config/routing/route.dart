@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../auth/view_model/bindings/login_binding.dart';
 import '../../../auth/view_model/login_view_model.dart';
+import '../../../auth/views/splash_screen.dart';
 import '../../../calender/views/add_note_screen.dart';
 import '../../../calender/views/calender_screen.dart';
 import '../../../history/view/history_screen.dart';
@@ -45,11 +46,11 @@ final appRouter = GoRouter(
           SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
           return null;
         },
-        pageBuilder: (context, state) =>
-            const NoTransitionPage(child: LoginScreen()
+        pageBuilder: (context, state) => const NoTransitionPage(
+            child:
+                //LoginScreen()
                 //  MainScreen()
-                // SplashScreen()
-                )),
+                SplashScreen())),
     ShellRoute(
       navigatorKey: _shellNavigatorKey,
       pageBuilder: (context, state, child) {
