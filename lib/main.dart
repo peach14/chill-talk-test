@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-// ignore: depend_on_referenced_packages
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -22,20 +21,15 @@ void main() {
     DeviceOrientation.portraitDown,
   ]);
   initializeDateFormatting('th', null).then((_) {
-    runApp(const MyApp.native());
+    runApp(const MyApp());
   });
 }
 
 class MyApp extends GetView {
-  final bool isDevicePreview;
-  const MyApp.native({super.key}) : isDevicePreview = false;
-
-  const MyApp.devicePreview({super.key}) : isDevicePreview = true;
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Get.put(AppRouterProvider());
-    // final route = Get.find<AppRouterProvider>();
     return GetMaterialApp.router(
       initialBinding: AppBinding(),
       locale: const Locale('th', 'TH'),
@@ -46,27 +40,12 @@ class MyApp extends GetView {
       supportedLocales: const [
         Locale('th', 'TH'),
       ],
-      // routeInformationParser: appRouter.routeInformationParser,
-      // routerDelegate: appRouter.routerDelegate,
       routeInformationParser: appRouter.routeInformationParser,
       routerDelegate: appRouter.routerDelegate,
       routeInformationProvider: appRouter.routeInformationProvider,
-      // builder: (context, widget) => ResponsiveWrapper.builder(
-      //     BouncingScrollWrapper.builder(context, widget!),
-      //     maxWidth: 1200,
-      //     minWidth: 320,
-      //     defaultScale: true,
-      //     breakpoints: [
-      //       // const ResponsiveBreakpoint.autoScale(600),
-      //       const ResponsiveBreakpoint.resize(320, name: MOBILE),
-      //       const ResponsiveBreakpoint.autoScale(540, name: TABLET),
-      //       //    const ResponsiveBreakpoint.autoScale(1200, name: TABLET),
-      //     ],
-      //     background: Container(color: const Color(0xFFF5F5F5))),
       title: 'Flutter Demo',
       theme: ThemeData(
         appBarTheme: const AppBarTheme(color: Color(0xff1a6cae)),
-        // colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: false,
       ),
     );

@@ -64,13 +64,6 @@ class TextFormFieldCustom extends GetView<LoginViewModel> {
   build(BuildContext context) {
     return FormField(
       autovalidateMode: AutovalidateMode.always,
-      validator: validator ??
-          (value) {
-            if (value is String) {
-              return (value.isNotEmpty) ? null : "กรุณากรอกข้อมูล";
-            }
-            return null;
-          },
       initialValue: textControllers?.text,
       builder: (FormFieldState<dynamic> field) {
         return Obx(() {
@@ -87,9 +80,11 @@ class TextFormFieldCustom extends GetView<LoginViewModel> {
                           fontWeight: FontWeight.bold))
                   : const SizedBox.shrink(),
               SizedBox(
-                height: CalResponsive.instance.scaleHeight(context, height!),
+                height: CalResponsive.instance.scaleHeight(context, 40),
                 width: width,
                 child: TextFormField(
+                  style: TextStyle(
+                      fontSize: CalResponsive.instance.scaleWidth(context, 14)),
                   focusNode: focusNode,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   onChanged: onChanged ??
@@ -99,13 +94,13 @@ class TextFormFieldCustom extends GetView<LoginViewModel> {
                       },
                   keyboardType: textInputType,
                   controller: textControllers,
-                  style: textStyle,
+                  // style: TextStyle(fontSize: 20),
                   decoration: FormType.email == formType
-                      ? inputDecoration(
+                      ? inputDecorationMobile(
                           value: controller.validEmail.value,
                           context: context,
                         )
-                      : inputDecoration(
+                      : inputDecorationMobile(
                           value: controller.validPass.value,
                           context: context,
                         ),
@@ -156,7 +151,7 @@ class TextFormFieldCustom extends GetView<LoginViewModel> {
     );
   }
 
-  InputDecoration inputDecoration({
+  InputDecoration inputDecorationMobile({
     required bool value,
     required BuildContext context,
   }) {
@@ -164,34 +159,27 @@ class TextFormFieldCustom extends GetView<LoginViewModel> {
         // enabled: true,
         filled: true,
         fillColor: backgroundColor ?? Colors.white38,
-        disabledBorder: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(12)),
-            borderSide: BorderSide(color: Colors.white38)),
+        disabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(
+                CalResponsive.instance.scaleWidth(context, 12))),
+            borderSide: const BorderSide(color: Colors.white38)),
         enabledBorder: OutlineInputBorder(
-            borderRadius: const BorderRadius.all(Radius.circular(12)),
+            borderRadius: BorderRadius.all(Radius.circular(
+                CalResponsive.instance.scaleWidth(context, 12))),
             borderSide: BorderSide(
                 width: 1.3,
                 color: value || controller.resError.value.status == 0
                     ? CustomColors.errorColor
                     : broderColor ?? CustomColors.primaryColor)),
         focusedBorder: OutlineInputBorder(
-            borderRadius: const BorderRadius.all(Radius.circular(12)),
-            borderSide: BorderSide(
-                color: value
-                    ? CustomColors.errorColor
-                    : CustomColors.primaryColor)),
-        border: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(12)),
-            borderSide: BorderSide(color: CustomColors.primaryColor)),
+            borderRadius: BorderRadius.all(Radius.circular(
+                CalResponsive.instance.scaleWidth(context, 12))),
+            borderSide:
+                BorderSide(color: value ? CustomColors.errorColor : CustomColors.primaryColor)),
+        border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(CalResponsive.instance.scaleWidth(context, 12))), borderSide: const BorderSide(color: CustomColors.primaryColor)),
         hintStyle: hintStyle,
         isDense: true,
-        contentPadding: EdgeInsets.fromLTRB(
-            24,
-            0,
-            0,
-            isPassword == true
-                ? MediaQuery.of(context).size.height * 0.025
-                : MediaQuery.of(context).size.height * 0),
+        contentPadding: EdgeInsets.fromLTRB(24, 0, 0, isPassword == true ? MediaQuery.of(context).size.height * 0.025 : MediaQuery.of(context).size.height * 0),
         hintText: hintText,
         prefixIcon: prefixIcon != null
             ? Container(
@@ -208,18 +196,34 @@ class TextFormFieldCustom extends GetView<LoginViewModel> {
               )
             : null,
         suffixIcon: isPassword == true
-            ? IconButton(
-                onPressed: onPressed ??
-                    () {
-                      controller.setEnablePassword();
-                    },
-                icon: iconSubmit ??
-                    Icon(
-                        size: 24,
-                        color: CustomColors.primaryColor,
-                        controller.showPassword.value
-                            ? Icons.visibility
-                            : Icons.visibility_off))
-            : const SizedBox());
+            ? Material(
+                color: Colors.transparent,
+                borderRadius: BorderRadius.circular(90),
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 12),
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(90),
+                    onTap: onPressed ??
+                        () {
+                          controller.setEnablePassword();
+                        },
+                    child: iconSubmit ??
+                        Icon(
+                          color: CustomColors.primaryColor,
+                          controller.showPassword.value
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          size: CalResponsive.instance.scaleWidth(context, 24),
+                        ),
+                  ),
+                ),
+              )
+            : Container(
+                color: Colors.transparent,
+                constraints: BoxConstraints(
+                    maxWidth: 6,
+                    maxHeight:
+                        MediaQuery.of(context).size.width >= 768 ? 90 : 40),
+              ));
   }
 }
