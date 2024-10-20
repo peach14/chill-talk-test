@@ -24,16 +24,17 @@ class RecordWorkViewModel extends GetxController {
   // Format the current date using the Thai Buddhist calendar
   final dates = "".obs;
 
-  final time = DateFormat('h:mm a').format(DateTime.now()).obs;
+  var time = DateFormat('h:mm a').format(DateTime.now());
   final disableAttendWork = true.obs;
   @override
   void onInit() async {
     _recordAttendWork();
     _recordOutWork();
     Timer.periodic(const Duration(seconds: 1), (_) async {
-      time.value = DateFormat('h:mm a').format(DateTime.now());
+      time = DateFormat('h:mm a').format(DateTime.now());
       _recordAttendWork();
       _recordOutWork();
+      update();
     });
     final dateFormat = DateFormat('EEEE d MMMM y', 'th');
     final formattedDate = dateFormat.format(DateTime.now());
@@ -143,22 +144,6 @@ class RecordWorkViewModel extends GetxController {
       }
 
       if (response.status == 1) {
-        //  WidgetsBinding.instance.addPostFrameCallback((_) {
-        //   Get.dialog(
-        //     AlertDialog(
-        //       title: Text("Title"),
-        //       content: Text("Your message here"),
-        //       actions: [
-        //         TextButton(
-        //           onPressed: () {
-        //             Get.back(); // Close the dialog
-        //           },
-        //           child: Text("OK"),
-        //         ),
-        //       ],
-        //     ),
-        //   );
-
         // ignore: use_build_context_synchronously
         dialogAlert(
           titleIcon: Image.asset(
@@ -220,20 +205,4 @@ class RecordWorkViewModel extends GetxController {
 
     return position;
   }
-
-  // double resize(
-  //     {required double referenceFontSize,
-  //     required double screenWidth,
-  //     required BuildContext context}) {
-  //   final responsive = ResponsiveWrapper.of(context).isMobile;
-  //   if (responsive) {
-  //     double referenceWidth = 360; // Reference screen width in pixels
-  //     double screenWidth = MediaQuery.of(context).size.width;
-  //     double scalingFactor = referenceFontSize / referenceWidth;
-  //     double dynamicFontSize = screenWidth * scalingFactor;
-  //     return dynamicFontSize;
-  //   } else {
-  //     return 0.0;
-  //   }
-  // }
 }

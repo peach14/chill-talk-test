@@ -91,7 +91,7 @@ class _MainScreenState extends State<MainScreen> {
                 GetBuilder<RecordWorkViewModel>(
                   builder: (controller) {
                     return Text(
-                      "${controller.time}",
+                      controller.time,
                       style: TextStyle(
                           color: CustomColors.onBackgroundColor,
                           fontSize:
